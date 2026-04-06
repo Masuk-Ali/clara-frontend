@@ -79,24 +79,115 @@ export const educationData = [
               {
                 name: "Seen Passage 1",
                 passage: "The history of Bangladesh is rich and diverse. From ancient times, the region has been influenced by various cultures. The Bengal Sultanate and Mughal Empire left lasting impacts. In 1971, Bangladesh gained independence through a liberation war. Today, it is a developing nation with a growing economy and vibrant culture.",
-                explanations: {
-                  0: "Introduction to Bangladesh's history.",
-                  1: "Cultural influences from different periods.",
-                  2: "Historical empires that shaped the region.",
-                  3: "The independence struggle in 1971.",
-                  4: "Current status as a developing nation."
+                bengaliTranslation: "বাংলাদেশের ইতিহাস সমৃদ্ধ এবং বৈচিত্র্যপূর্ণ। প্রাচীনকাল থেকে, এই অঞ্চলটি বিভিন্ন সংস্কৃতির দ্বারা প্রভাবিত হয়েছে। বাংলা সুলতানাত এবং মুঘল সাম্রাজ্য স্থায়ী প্রভাব ফেলেছে। ১৯৭১ সালে, বাংলাদেশ একটি মুক্তিযুদ্ধের মাধ্যমে স্বাধীনতা লাভ করে। আজ, এটি একটি উন্নয়নশীল দেশ যেখানে ক্রমবর্ধমান অর্থনীতি এবং প্রাণবন্ত সংস্কৃতি রয়েছে।",
+                wordData: {
+                  "history": {
+                    english: "the study of past events, particularly in human affairs",
+                    bengali: "ইতিহাস",
+                    pronunciation: "/ˈhɪstəri/",
+                    example: "The history of ancient Rome fascinates many scholars.",
+                    saved: false
+                  },
+                  "diverse": {
+                    english: "showing a great deal of variety; very different",
+                    bengali: "বৈচিত্র্যপূর্ণ",
+                    pronunciation: "/daɪˈvɜːrs/",
+                    example: "The city has a diverse population from many countries.",
+                    saved: false
+                  },
+                  "influenced": {
+                    english: "have an effect on the way someone or something develops",
+                    bengali: "প্রভাবিত",
+                    pronunciation: "/ˈɪnfluənst/",
+                    example: "Her teacher greatly influenced her career choice.",
+                    saved: false
+                  },
+                  "independence": {
+                    english: "the state of being free from outside control",
+                    bengali: "স্বাধীনতা",
+                    pronunciation: "/ˌɪndɪˈpendəns/",
+                    example: "The country celebrated its independence day with fireworks.",
+                    saved: false
+                  },
+                  "vibrant": {
+                    english: "full of energy and life",
+                    bengali: "প্রাণবন্ত",
+                    pronunciation: "/ˈvaɪbrənt/",
+                    example: "The vibrant colors of the sunset amazed everyone.",
+                    saved: false
+                  }
+                },
+                sentenceExplanations: {
+                  0: {
+                    bengali: "বাংলাদেশের ইতিহাস সমৃদ্ধ এবং বৈচিত্র্যপূর্ণ।",
+                    grammar: "Subject-verb agreement: 'history' (singular) takes 'is' (singular verb). Adjective 'rich and diverse' describes the noun 'history'."
+                  },
+                  1: {
+                    bengali: "প্রাচীনকাল থেকে, এই অঞ্চলটি বিভিন্ন সংস্কৃতির দ্বারা প্রভাবিত হয়েছে।",
+                    grammar: "Present perfect tense: 'has been influenced' shows an action that started in the past and continues. Passive voice construction."
+                  },
+                  2: {
+                    bengali: "বাংলা সুলতানাত এবং মুঘল সাম্রাজ্য স্থায়ী প্রভাব ফেলেছে।",
+                    grammar: "Compound subject: 'Sultanate and Empire' connected by 'and'. Past tense 'left' indicates completed action."
+                  },
+                  3: {
+                    bengali: "১৯৭১ সালে, বাংলাদেশ একটি মুক্তিযুদ্ধের মাধ্যমে স্বাধীনতা লাভ করে।",
+                    grammar: "Prepositional phrase 'through a liberation war' shows means. Past tense 'gained' for completed historical event."
+                  },
+                  4: {
+                    bengali: "আজ, এটি একটি উন্নয়নশীল দেশ যেখানে ক্রমবর্ধমান অর্থনীতি এবং প্রাণবন্ত সংস্কৃতি রয়েছে।",
+                    grammar: "Relative clause 'where...culture' modifies 'nation'. Present continuous 'growing' and 'vibrant' describe current state."
+                  }
                 },
                 questions: [
                   {
                     type: "mcq",
-                    question: "When did Bangladesh gain independence?",
-                    options: ["1947", "1952", "1971", "1980"],
-                    correct: 2
+                    question: "What is the main topic of the passage?",
+                    options: ["Geography of Bangladesh", "History of Bangladesh", "Economy of Bangladesh", "Culture of Bangladesh"],
+                    correct: 1,
+                    explanation: "The passage discusses the historical development, cultural influences, and independence of Bangladesh."
                   },
                   {
                     type: "short",
-                    question: "Name one empire that influenced Bangladesh.",
-                    answer: "Mughal Empire"
+                    question: "When did Bangladesh gain independence?",
+                    answer: "1971",
+                    explanation: "The passage states: 'In 1971, Bangladesh gained independence through a liberation war.'"
+                  },
+                  {
+                    type: "fill_blank_no_clue",
+                    question: "The history of Bangladesh is rich and ______.",
+                    answer: "diverse",
+                    explanation: "'Diverse' means showing variety, which fits the context of Bangladesh having different cultural influences."
+                  },
+                  {
+                    type: "fill_blank_with_clue",
+                    question: "Complete the sentence: 'From ancient times, the region has been ______ by various cultures.'",
+                    clue: "influenced",
+                    words: ["influenced", "affected", "changed", "modified"],
+                    answer: "influenced",
+                    explanation: "'Influenced' means to have an effect on development, which matches the historical context."
+                  },
+                  {
+                    type: "matching",
+                    question: "Match the empires with their descriptions:",
+                    pairs: [
+                      { left: "Bengal Sultanate", right: "Left lasting impacts on the region" },
+                      { left: "Mughal Empire", right: "Left lasting impacts on the region" }
+                    ],
+                    explanation: "Both the Bengal Sultanate and Mughal Empire are mentioned as having left lasting impacts on Bangladesh's history."
+                  },
+                  {
+                    type: "rearrangement",
+                    question: "Rearrange the sentences to form a logical paragraph:",
+                    sentences: [
+                      "In 1971, Bangladesh gained independence through a liberation war.",
+                      "The history of Bangladesh is rich and diverse.",
+                      "From ancient times, the region has been influenced by various cultures.",
+                      "Today, it is a developing nation with a growing economy and vibrant culture.",
+                      "The Bengal Sultanate and Mughal Empire left lasting impacts."
+                    ],
+                    correctOrder: [1, 2, 4, 0, 3],
+                    explanation: "The logical flow starts with the general statement about history, then chronological development, empires, independence, and current status."
                   }
                 ]
               },

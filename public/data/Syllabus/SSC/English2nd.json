@@ -1,0 +1,30 @@
+{
+  "subject": "SSC English 2nd Paper",
+  "total_marks": 100,
+  "sections": [
+    {
+      "section_title": "Part A: Grammar",
+      "section_marks": 60,
+      "topics": [
+        { "id": 1, "name": "Gap filling with clues (Prepositions/Articles/Parts of Speech)", "marks": 5 },
+        { "id": 2, "name": "Gap filling without clues", "marks": 5 },
+        { "id": 3, "name": "Substitution Table", "marks": 6 },
+        { "id": 4, "name": "Right Form of Verbs", "marks": 10 },
+        { "id": 5, "name": "Changing Sentences (Voice/Degree/Affirmative to Negative/Simple-Complex-Compound)", "marks": 10 },
+        { "id": 6, "name": "Completing Sentences", "marks": 5 },
+        { "id": 7, "name": "Suffix & Prefix", "marks": 7 },
+        { "id": 8, "name": "Tag Questions", "marks": 7 },
+        { "id": 9, "name": "Sentence Connectors", "marks": 5 }
+      ]
+    },
+    {
+      "section_title": "Part B: Composition",
+      "section_marks": 40,
+      "topics": [
+        { "id": 10, "name": "Formal Letter (Complaint/Notice/Request)", "marks": 10 },
+        { "id": 11, "name": "Writing Paragraph", "marks": 14 },
+        { "id": 12, "name": "Composition (Essay)", "marks": 16 }
+      ]
+    }
+  ]
+}

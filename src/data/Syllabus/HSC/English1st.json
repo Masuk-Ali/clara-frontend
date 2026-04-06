@@ -1,0 +1,28 @@
+{
+  "subject": "HSC English 1st Paper",
+  "total_marks": 100,
+  "sections": [
+    {
+      "section_title": "Part A: Reading",
+      "section_marks": 60,
+      "topics": [
+        { "id": 1, "name": "MCQs (Seen Passage 1)", "marks": 5 },
+        { "id": 2, "name": "Short Questions (Seen Passage 1)", "marks": 15 },
+        { "id": 3, "name": "Information Transfer/Flow Chart (Seen Passage 2)", "marks": 5 },
+        { "id": 4, "name": "Summary Writing (Seen Passage 3)", "marks": 10 },
+        { "id": 5, "name": "Cloze Test with Clues (Unseen)", "marks": 5 },
+        { "id": 6, "name": "Cloze Test without Clues (Unseen)", "marks": 10 },
+        { "id": 7, "name": "Rearranging (Unseen)", "marks": 10 }
+      ]
+    },
+    {
+      "section_title": "Part B: Guided Writing",
+      "section_marks": 40,
+      "topics": [
+        { "id": 8, "name": "Interpreting Graph/Chart", "marks": 15 },
+        { "id": 9, "name": "Story Writing", "marks": 15 },
+        { "id": 10, "name": "Informal Letter", "marks": 10 }
+      ]
+    }
+  ]
+}

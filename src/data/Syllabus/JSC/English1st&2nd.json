@@ -1,0 +1,30 @@
+{
+  "subject": "JSC English",
+  "total_marks": 100,
+  "sections": [
+    {
+      "section_title": "Part A: Reading & Grammar",
+      "section_marks": 60,
+      "topics": [
+        { "id": 1, "name": "MCQ & Questions (Seen)", "marks": 15 },
+        { "id": 2, "name": "Gap Filling (Unseen)", "marks": 5 },
+        { "id": 3, "name": "Information Transfer/True-False", "marks": 10 },
+        { "id": 4, "name": "Suffix & Prefix", "marks": 5 },
+        { "id": 5, "name": "Articles & Prepositions", "marks": 5 },
+        { "id": 6, "name": "Changing Sentences", "marks": 5 },
+        { "id": 7, "name": "Punctuation & Capitalization", "marks": 5 },
+        { "id": 8, "name": "Right Form of Verbs", "marks": 10 }
+      ]
+    },
+    {
+      "section_title": "Part B: Writing",
+      "section_marks": 40,
+      "topics": [
+        { "id": 9, "name": "Dialogue Writing", "marks": 10 },
+        { "id": 10, "name": "Paragraph Writing", "marks": 10 },
+        { "id": 11, "name": "Completing Story", "marks": 10 },
+        { "id": 12, "name": "Informal Letter/Email", "marks": 10 }
+      ]
+    }
+  ]
+}
