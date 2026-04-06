@@ -97,27 +97,3 @@ export default function TopBar({ pageTitle, onMenuToggle }) {
     </div>
   );
 }
-          <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-40">
-            <button
-              onClick={() => {
-                navigate('/settings');
-                setShowProfileMenu(false);
-              }}
-              className="w-full text-left flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition rounded-t-lg"
-            >
-              <span>⚙️</span>
-              <span>Settings</span>
-            </button>
-            <button
-              onClick={logout}
-              className="w-full text-left flex items-center gap-2 px-4 py-2 hover:bg-red-50 text-red-600 transition rounded-b-lg border-t border-gray-200"
-            >
-              <span>🚪</span>
-              <span>Logout</span>
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}

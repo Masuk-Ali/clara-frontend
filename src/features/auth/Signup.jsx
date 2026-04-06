@@ -81,8 +81,8 @@ export default function Signup() {
         return;
       }
 
-      // Success - redirect to login or dashboard
-      navigate("/login");
+      // Success - redirect to dashboard
+      navigate("/");
     } catch (error) {
       setErrors({ general: "An unexpected error occurred. Please try again." });
     } finally {

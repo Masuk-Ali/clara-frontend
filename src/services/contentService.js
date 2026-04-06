@@ -1,7 +1,11 @@
 import { educationData } from '../data/classesData';
 import { grammarContent } from '../data/grammarContent';
+import { contentDatabase } from '../data/topicsDatabase';
 
 export class ContentService {
+  /**
+   * Legacy method - Load content by class/course/topic
+   */
   static async loadContent(classId, courseId, topicId, contentType) {
     try {
       // Find the class and course
@@ -128,6 +132,89 @@ export class ContentService {
       default:
         return false;
     }
+  }
+
+  /**
+   * NEW: Data-driven methods for unified content structure
+   */
+
+  /**
+   * Fetch a single topic by ID from the unified database
+   * @param {string} topicId - The topic identifier
+   * @returns {object} Topic data object
+   */
+  static getTopic(topicId) {
+    if (!topicId) {
+      console.warn('ContentService: No topic ID provided');
+      return null;
+    }
+
+    const topic = contentDatabase[topicId.toLowerCase()];
+    if (!topic) {
+      console.warn(`ContentService: Topic "${topicId}" not found`);
+      return null;
+    }
+
+    return topic;
+  }
+
+  /**
+   * Fetch topics by type
+   * @param {string} type - Topic type ('grammar', 'reading', etc.)
+   * @returns {array} Array of topics matching the type
+   */
+  static getTopicsByType(type) {
+    if (!type) {
+      return Object.values(contentDatabase);
+    }
+
+    return Object.values(contentDatabase).filter(
+      (topic) => topic.type === type.toLowerCase()
+    );
+  }
+
+  /**
+   * Get all topic IDs of a specific type
+   * @param {string} type - Topic type
+   * @returns {array} Array of topic IDs
+   */
+  static getTopicIds(type) {
+    const topics = type
+      ? this.getTopicsByType(type)
+      : Object.values(contentDatabase);
+    return topics.map((t) => t.id);
+  }
+
+  /**
+   * Search topics
+   * @param {string} query - Search query
+   * @returns {array} Matching topics
+   */
+  static search(query) {
+    if (!query) return Object.values(contentDatabase);
+
+    const q = query.toLowerCase();
+    return Object.values(contentDatabase).filter(
+      (topic) =>
+        topic.title.toLowerCase().includes(q) ||
+        topic.description.toLowerCase().includes(q) ||
+        topic.id.toLowerCase().includes(q)
+    );
+  }
+
+  /**
+   * Validate topic data structure
+   * @param {object} topic - Topic object to validate
+   * @returns {boolean} Whether the topic is valid
+   */
+  static isValidTopic(topic) {
+    return (
+      topic &&
+      topic.id &&
+      topic.type &&
+      topic.title &&
+      topic.description
+    );
   }
 }
 

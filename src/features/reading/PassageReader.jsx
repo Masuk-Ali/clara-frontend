@@ -4,10 +4,11 @@ import VocabularyPanel from './VocabularyPanel';
 import QuestionEngine from './QuestionEngine';
 
 const PassageReader = ({
-  passage,
-  wordData,
-  sentenceExplanations,
-  questions
+  passage = '',
+  wordData = {},
+  sentenceExplanations = {},
+  questions = [],
+  title = 'Interactive Passage Reader'
 }) => {
   const [selectedWord, setSelectedWord] = useState(null);
   const [wordPosition, setWordPosition] = useState({ x: 0, y: 0 });
@@ -21,8 +22,11 @@ const PassageReader = ({
   useEffect(() => {
     const saved = localStorage.getItem('clara-vocabulary');
     if (saved) {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      setSavedWords(prev => ({ ...prev, ...JSON.parse(saved) }));
+      try {
+        setSavedWords(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to load saved vocabulary:', e);
+      }
     }
   }, []);
 
@@ -125,45 +129,45 @@ const PassageReader = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg relative">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-center">Interactive Passage Reader</h2>
-        <button
-          onClick={() => setShowVocabulary(!showVocabulary)}
-          className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
-        >
-          📚 My Vocabulary ({Object.values(savedWords).filter(Boolean).length})
-        </button>
-      </div>
-
-      <div className="mb-4 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
-        <p className="text-blue-800 text-sm">
-          <strong>Instructions:</strong>
-          • Click once on a word to see its meaning
-          • Click twice on a sentence to see Bengali translation and grammar
-          • Click thrice on a sentence for grammar explanation
-          • Save important words to your vocabulary
-        </p>
-      </div>
-
-      {showVocabulary && (
-        <div className="mb-6">
-          <VocabularyPanel
-            savedWords={savedWords}
-            wordData={wordData}
-            onRemoveWord={handleRemoveWord}
-          />
+    <div className="max-w-6xl mx-auto p-6 space-y-8">
+      <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
+          <button
+            onClick={() => setShowVocabulary(!showVocabulary)}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium"
+          >
+            📚 My Vocabulary ({Object.values(savedWords).filter(Boolean).length})
+          </button>
         </div>
-      )}
 
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">Passage:</h3>
-        <div
-          ref={passageRef}
-          className="text-gray-800 leading-relaxed select-none"
-          onClick={handlePassageClick}
-        >
-          {sentences.map((sentence, index) => renderSentence(sentence.trim(), index))}
+        <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
+          <p className="text-blue-800 text-sm">
+            <strong>How to use:</strong> Click once on a word to see its meaning • 
+            Click twice on a sentence for Bengali translation and grammar • 
+            Save important words to your vocabulary
+          </p>
+        </div>
+
+        {showVocabulary && (
+          <div className="mb-6">
+            <VocabularyPanel
+              savedWords={savedWords}
+              wordData={wordData}
+              onRemoveWord={handleRemoveWord}
+            />
+          </div>
+        )}
+
+        <div className="mb-8">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">📖 Passage</h3>
+          <div
+            ref={passageRef}
+            className="prose prose-lg max-w-none text-gray-800 leading-relaxed select-none bg-gray-50 p-6 rounded-lg"
+            onClick={handlePassageClick}
+          >
+            {sentences.map((sentence, index) => renderSentence(sentence.trim(), index))}
+          </div>
         </div>
       </div>
 
@@ -181,7 +185,18 @@ const PassageReader = ({
 
       {/* Questions Section */}
       {questions && questions.length > 0 && (
-        <QuestionEngine questions={questions} />
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="mb-6">
+            <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <span>❓</span>
+              Comprehension Questions
+            </h3>
+            <p className="text-gray-600 mt-2">
+              Test your understanding of the passage with these questions.
+            </p>
+          </div>
+          <QuestionEngine questions={questions} />
+        </div>
       )}
     </div>
   );

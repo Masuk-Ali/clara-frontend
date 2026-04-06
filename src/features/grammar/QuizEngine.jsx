@@ -1,328 +1,208 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { usePaginatedItems, useScore } from '../../hooks';
+import { calculateScorePercentage, getPerformanceLabel } from '../../utils/styleHelpers';
+import { Button, EmptyState, Card } from '../../components/ui';
 
-export default function QuizEngine({ quizQuestions, onQuizComplete }) {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
-  const [quizStarted, setQuizStarted] = useState(false);
-  const [shuffledQuestions, setShuffledQuestions] = useState([]);
+export default function QuizEngine({ quizQuestions = [] }) {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [results, setResults] = useState([]);
 
-  // Shuffle questions on mount
-  useEffect(() => {
-    const shuffled = [...quizQuestions].sort(() => Math.random() - 0.5);
-    setShuffledQuestions(shuffled);
-  }, [quizQuestions]);
+  // Use hooks for pagination and scoring
+  const {
+    currentItem: question,
+    index: currentIndex,
+    goNext,
+    reset,
+    isLast,
+    total
+  } = usePaginatedItems(quizQuestions);
 
-  // Timer effect
-  useEffect(() => {
-    if (quizStarted && timeLeft > 0 && !showResults) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (timeLeft === 0) {
-      handleSubmitQuiz();
-    }
-  }, [timeLeft, quizStarted, showResults]);
+  const { correct, addCorrect, reset: resetScore } = useScore(total);
 
-  const startQuiz = () => {
-    setQuizStarted(true);
-    setTimeLeft(300);
-  };
-
-  const handleAnswerSelect = (questionIndex, answerIndex) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionIndex]: answerIndex
-    }));
-  };
-
-  const nextQuestion = () => {
-    if (currentQuestion < shuffledQuestions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    }
-  };
-
-  const prevQuestion = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1);
-    }
-  };
-
-  const handleSubmitQuiz = () => {
-    setShowResults(true);
-    setQuizStarted(false);
-  };
-
-  const calculateResults = () => {
-    let correct = 0;
-    let incorrect = 0;
-    let unanswered = 0;
-    const weakAreas = [];
-    const mistakes = [];
-
-    shuffledQuestions.forEach((question, index) => {
-      const userAnswer = answers[index];
-      const correctAnswer = question.correct;
-
-      if (userAnswer === undefined) {
-        unanswered++;
-        weakAreas.push(question.topic || 'General');
-      } else if (userAnswer === correctAnswer) {
-        correct++;
-      } else {
-        incorrect++;
-        weakAreas.push(question.topic || 'General');
-        mistakes.push({
-          question: question.question,
-          userAnswer: question.options[userAnswer],
-          correctAnswer: question.options[correctAnswer],
-          explanation: question.explanation
-        });
-      }
-    });
-
-    const score = Math.round((correct / shuffledQuestions.length) * 100);
-    const uniqueWeakAreas = [...new Set(weakAreas)];
-
-    return {
-      correct,
-      incorrect,
-      unanswered,
-      score,
-      weakAreas: uniqueWeakAreas,
-      mistakes,
-      total: shuffledQuestions.length
-    };
-  };
-
-  const getPerformanceMessage = (score) => {
-    if (score >= 90) return { message: "Outstanding! You're a grammar master!", emoji: "🏆", color: "text-green-600" };
-    if (score >= 80) return { message: "Excellent work! Keep practicing to reach perfection.", emoji: "🌟", color: "text-blue-600" };
-    if (score >= 70) return { message: "Good job! Focus on the areas you missed.", emoji: "👍", color: "text-yellow-600" };
-    if (score >= 60) return { message: "Not bad! Review the rules and try again.", emoji: "📚", color: "text-orange-600" };
-    return { message: "Keep studying! Practice makes perfect.", emoji: "💪", color: "text-red-600" };
-  };
-
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  if (!quizStarted && !showResults) {
-    return (
-      <div className="text-center py-16">
-        <div className="text-6xl mb-6">🧠</div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">Ready for the Quiz?</h2>
-        <p className="text-gray-600 mb-8 max-w-md mx-auto">
-          Test your understanding with {shuffledQuestions.length} random questions.
-          You have 5 minutes to complete the quiz.
-        </p>
-
-        <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm mx-auto mb-8">
-          <h3 className="font-semibold text-gray-800 mb-4">Quiz Rules:</h3>
-          <ul className="text-sm text-gray-600 space-y-2 text-left">
-            <li>• Answer all questions to get full score</li>
-            <li>• You can go back to previous questions</li>
-            <li>• Time limit: 5 minutes</li>
-            <li>• No negative marking</li>
-          </ul>
-        </div>
-
-        <button
-          onClick={startQuiz}
-          className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition font-semibold text-lg shadow-lg"
-        >
-          Start Quiz 🚀
-        </button>
-      </div>
-    );
+  if (total === 0) {
+    return <EmptyState emoji="🎯" title="No Quiz Questions" message="No quiz questions available." />;
   }
 
-  if (showResults) {
-    const results = calculateResults();
-    const performance = getPerformanceMessage(results.score);
+  const handleSubmit = () => {
+    if (selectedOption === null || !question) return;
 
+    const isCorrect = selectedOption === question.correct;
+
+    const result = {
+      question: question.question,
+      selectedAnswer: question.options[selectedOption],
+      correctAnswer: question.options[question.correct],
+      explanation: question.explanation,
+      isCorrect
+    };
+
+    setResults((prev) => [...prev, result]);
+    if (isCorrect) addCorrect();
+    setSubmitted(true);
+  };
+
+  const handleNext = () => {
+    goNext();
+    setSelectedOption(null);
+    setSubmitted(false);
+  };
+
+  const handleRestart = () => {
+    reset();
+    resetScore();
+    setSelectedOption(null);
+    setSubmitted(false);
+    setResults([]);
+  };
+
+  const scorePercentage = calculateScorePercentage(correct, total);
+  const performance = getPerformanceLabel(scorePercentage);
+
+  // Quiz results view
+  if (submitted && isLast) {
     return (
       <div className="space-y-6">
-        <div className="text-center py-8">
-          <div className="text-6xl mb-4">{performance.emoji}</div>
-          <h2 className={`text-3xl font-bold mb-2 ${performance.color}`}>
-            {performance.message}
-          </h2>
-          <p className="text-gray-600">Your Score: {results.score}%</p>
-        </div>
+        <Card>
+          <div className="text-center mb-6">
+            <div className="text-5xl mb-4">{performance.emoji}</div>
+            <h2 className={`text-3xl font-bold ${performance.color}`}>
+              {performance.label}!
+            </h2>
+            <p className="text-gray-600 mt-2">
+              You scored {correct} out of {total} ({scorePercentage}%)
+            </p>
+          </div>
 
-        {/* Score Breakdown */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-green-50 p-4 rounded-xl text-center border border-green-200">
-            <div className="text-2xl font-bold text-green-600">{results.correct}</div>
-            <div className="text-sm text-green-700">Correct</div>
+          <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
+            <div
+              className="bg-blue-600 h-3 rounded-full transition-all"
+              style={{ width: `${scorePercentage}%` }}
+            />
           </div>
-          <div className="bg-red-50 p-4 rounded-xl text-center border border-red-200">
-            <div className="text-2xl font-bold text-red-600">{results.incorrect}</div>
-            <div className="text-sm text-red-700">Incorrect</div>
-          </div>
-          <div className="bg-yellow-50 p-4 rounded-xl text-center border border-yellow-200">
-            <div className="text-2xl font-bold text-yellow-600">{results.unanswered}</div>
-            <div className="text-sm text-yellow-700">Unanswered</div>
-          </div>
-          <div className="bg-blue-50 p-4 rounded-xl text-center border border-blue-200">
-            <div className="text-2xl font-bold text-blue-600">{results.score}%</div>
-            <div className="text-sm text-blue-700">Score</div>
-          </div>
-        </div>
+        </Card>
 
-        {/* Weak Areas */}
-        {results.weakAreas.length > 0 && (
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <span>🎯</span>
-              Areas to Focus On
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {results.weakAreas.map((area, index) => (
-                <span key={index} className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm">
-                  {area}
+        {/* Results review */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-gray-900">Review Your Answers</h3>
+          {results.map((result, index) => (
+            <Card
+              key={index}
+              variant="outlined"
+              className={
+                result.isCorrect
+                  ? 'border-green-300 bg-green-50/30'
+                  : 'border-red-300 bg-red-50/30'
+              }
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <span className="text-2xl">
+                  {result.isCorrect ? '✓' : '✗'}
                 </span>
-              ))}
-            </div>
-            <div className="mt-4 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
-              <h4 className="font-semibold text-blue-800 mb-2">Teacher's Recommendation:</h4>
-              <p className="text-blue-700 text-sm">
-                Review the rules for these topics and practice more examples.
-                Consider going back to the Rules section for a quick refresher.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Mistakes Review */}
-        {results.mistakes.length > 0 && (
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <span>📝</span>
-              Review Your Mistakes
-            </h3>
-            <div className="space-y-4">
-              {results.mistakes.slice(0, 3).map((mistake, index) => (
-                <div key={index} className="p-4 bg-red-50 rounded-lg border-l-4 border-red-400">
-                  <p className="font-medium text-gray-800 mb-2">{mistake.question}</p>
-                  <div className="space-y-1 text-sm">
-                    <p><strong>Your answer:</strong> <span className="text-red-600">{mistake.userAnswer}</span></p>
-                    <p><strong>Correct answer:</strong> <span className="text-green-600">{mistake.correctAnswer}</span></p>
-                    <p><strong>Why?</strong> {mistake.explanation}</p>
-                  </div>
+                <div className="flex-1">
+                  <p className="text-sm text-gray-600 font-medium">Question {index + 1}</p>
+                  <p className="text-gray-900">{result.question}</p>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
+              </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-4 justify-center">
-          <button
-            onClick={() => window.location.reload()}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            Try Again
-          </button>
-          <button
-            onClick={() => onQuizComplete && onQuizComplete(results)}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-          >
-            Back to Topics
-          </button>
+              <div className="space-y-2 text-sm">
+                <p>Your answer: <span className="font-medium">{result.selectedAnswer}</span></p>
+                <p>Correct answer: <span className="font-medium">{result.correctAnswer}</span></p>
+                {result.explanation && (
+                  <p className="text-gray-700 mt-2 p-2 bg-white rounded border border-gray-200">
+                    💡 <span>{result.explanation}</span>
+                  </p>
+                )}
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <div className="flex justify-end">
+          <Button onClick={handleRestart}>Restart Quiz</Button>
         </div>
       </div>
     );
   }
 
-  const currentQ = shuffledQuestions[currentQuestion];
-  const progressPercentage = ((currentQuestion + 1) / shuffledQuestions.length) * 100;
-
+  // Quiz question view
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">Quiz in Progress</h2>
-          <p className="text-gray-600">Question {currentQuestion + 1} of {shuffledQuestions.length}</p>
+    <div className="space-y-6">
+      <Card>
+        <div className="mb-6">
+          <p className="text-sm text-gray-500 mb-2">
+            Question {currentIndex + 1} of {total}
+          </p>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-blue-600 h-2 rounded-full transition-all"
+              style={{ width: `${((currentIndex + 1) / total) * 100}%` }}
+            />
+          </div>
         </div>
-        <div className="text-right">
-          <div className="text-lg font-mono font-bold text-red-600">{formatTime(timeLeft)}</div>
-          <div className="text-sm text-gray-500">Time Remaining</div>
-        </div>
-      </div>
 
-      {/* Progress Bar */}
-      <div className="w-full bg-gray-200 rounded-full h-3">
-        <div
-          className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-300"
-          style={{ width: `${progressPercentage}%` }}
-        ></div>
-      </div>
-
-      {/* Question */}
-      <div className="bg-white rounded-xl shadow-lg p-8">
-        <h3 className="text-xl font-semibold text-gray-800 mb-6">{currentQ.question}</h3>
+        <h2 className="text-2xl font-semibold text-gray-900 mb-6">{question.question}</h2>
 
         <div className="space-y-3">
-          {currentQ.options.map((option, index) => (
-            <label key={index} className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+          {question.options.map((option, index) => (
+            <label
+              key={index}
+              className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition ${
+                selectedOption === index
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-gray-300 hover:border-blue-300'
+              } ${submitted ? 'cursor-not-allowed' : ''}`}
+            >
               <input
                 type="radio"
-                name={`question-${currentQuestion}`}
-                value={index}
-                checked={answers[currentQuestion] === index}
-                onChange={() => handleAnswerSelect(currentQuestion, index)}
-                className="text-blue-600 focus:ring-blue-500"
+                name={`quiz-option-${currentIndex}`}
+                checked={selectedOption === index}
+                onChange={() => setSelectedOption(index)}
+                disabled={submitted}
+                className="h-4 w-4 text-blue-600"
               />
               <span className="text-gray-800">{option}</span>
             </label>
           ))}
         </div>
-      </div>
 
-      {/* Navigation */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={prevQuestion}
-          disabled={currentQuestion === 0}
-          className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
-        >
-          ← Previous
-        </button>
-
-        <div className="flex gap-2">
-          {shuffledQuestions.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentQuestion(index)}
-              className={`w-3 h-3 rounded-full transition ${
-                index === currentQuestion ? 'bg-blue-600' :
-                answers[index] !== undefined ? 'bg-green-500' : 'bg-gray-300'
-              }`}
-            />
-          ))}
-        </div>
-
-        {currentQuestion === shuffledQuestions.length - 1 ? (
-          <button
-            onClick={handleSubmitQuiz}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+        {!submitted && (
+          <Button
+            onClick={handleSubmit}
+            disabled={selectedOption === null}
+            fullWidth
+            className="mt-6"
           >
-            Submit Quiz
-          </button>
-        ) : (
-          <button
-            onClick={nextQuestion}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            Next →
-          </button>
+            Submit Answer
+          </Button>
         )}
-      </div>
+      </Card>
+
+      {submitted && !isLast && (
+        <div className={`rounded-lg border p-4 ${
+          results[currentIndex]?.isCorrect
+            ? 'bg-green-50 border-green-200 text-green-900'
+            : 'bg-red-50 border-red-200 text-red-900'
+        }`}>
+          <p className="font-semibold">
+            {results[currentIndex]?.isCorrect ? '✓ Correct!' : '✗ Incorrect.'}
+          </p>
+          <p className="mt-2 text-sm">
+            Correct answer: <span className="font-medium">{question.options[question.correct]}</span>
+          </p>
+          {question.explanation && (
+            <p className="mt-2 text-sm">💡 {question.explanation}</p>
+          )}
+        </div>
+      )}
+
+      {submitted && !isLast && (
+        <div className="flex justify-end">
+          <Button variant="secondary" onClick={handleNext}>
+            Next Question
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

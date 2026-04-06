@@ -12,9 +12,25 @@ export default function Layout({ children, title }) {
   const getPageTitle = (pathname) => {
     if (title) return title;
 
+    // Main navigation
     if (pathname === '/') return 'Dashboard';
-    if (pathname === '/chat') return 'AI Chat';
     if (pathname === '/classes') return 'Classes';
+    if (pathname === '/library') return 'Library';
+
+    // Library
+    if (pathname === '/library/textbooks') return 'Textbooks';
+    if (pathname === '/library/test-papers') return 'Test Papers';
+    if (pathname === '/library/reference') return 'Reference Books';
+    if (pathname === '/library/study-materials') return 'Study Materials';
+
+    // My Account
+    if (pathname === '/my-courses') return 'My Courses';
+    if (pathname === '/my-payments') return 'My Payments';
+    if (pathname === '/progress') return 'Progress';
+    if (pathname === '/achievements') return 'Achievements';
+
+    // Useful Links
+    if (pathname === '/chat') return 'AI Chat';
     if (pathname === '/profile') return 'Profile';
     if (pathname === '/settings') return 'Settings';
     if (pathname === '/dictionary') return 'Dictionary';
@@ -34,10 +50,10 @@ export default function Layout({ children, title }) {
         />
       </div>
 
-      {/* Sidebar Overlay (Mobile) */}
+      {/* Sidebar Overlay (All screens) */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-30"
           onClick={() => setSidebarOpen(false)}
         />
       )}

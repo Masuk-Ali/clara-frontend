@@ -123,24 +123,18 @@ export const useCompletedTopicsCount = (courseId) =>
   useAppStore((state) => state.progress[courseId]?.completedTopics?.length || 0);
 
 // Actions selectors for better tree-shaking
-export const useUserActions = () => useAppStore((state) => ({
-  setUser: state.setUser,
-  updateUser: state.updateUser,
-  clearUser: state.clearUser
-}));
+export const useSetUser = () => useAppStore((state) => state.setUser);
+export const useUpdateUser = () => useAppStore((state) => state.updateUser);
+export const useClearUser = () => useAppStore((state) => state.clearUser);
 
-export const useVocabularyActions = () => useAppStore((state) => ({
-  addWord: state.addWord,
-  removeWord: state.removeWord,
-  updateWord: state.updateWord,
-  clearVocabulary: state.clearVocabulary
-}));
+export const useAddWord = () => useAppStore((state) => state.addWord);
+export const useRemoveWord = () => useAppStore((state) => state.removeWord);
+export const useUpdateWord = () => useAppStore((state) => state.updateWord);
+export const useClearVocabulary = () => useAppStore((state) => state.clearVocabulary);
 
-export const useProgressActions = () => useAppStore((state) => ({
-  updateProgress: state.updateProgress,
-  completeTopic: state.completeTopic,
-  resetProgress: state.resetProgress,
-  clearAllProgress: state.clearAllProgress
-}));
+export const useUpdateProgress = () => useAppStore((state) => state.updateProgress);
+export const useCompleteTopic = () => useAppStore((state) => state.completeTopic);
+export const useResetProgress = () => useAppStore((state) => state.resetProgress);
+export const useClearAllProgress = () => useAppStore((state) => state.clearAllProgress);
 
 export default useAppStore;

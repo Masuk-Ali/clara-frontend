@@ -10,7 +10,15 @@ export {
   useVocabularyCount,
   useCourseProgress,
   useCompletedTopicsCount,
-  useUserActions,
-  useVocabularyActions,
-  useProgressActions
+  useSetUser,
+  useUpdateUser,
+  useClearUser,
+  useAddWord,
+  useRemoveWord,
+  useUpdateWord,
+  useClearVocabulary,
+  useUpdateProgress,
+  useCompleteTopic,
+  useResetProgress,
+  useClearAllProgress
 } from './appStore';

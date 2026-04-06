@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../services/supabase";
-import { useUserActions, useIsAuthenticated, useUser } from "../store";
+import { useSetUser, useIsAuthenticated, useUser } from "../store";
 
 import Login from "../features/auth/Login";
 import Signup from "../features/auth/Signup";
@@ -16,13 +16,14 @@ import SubjectPage from "../features/courses/SubjectPage";
 import TopicContent from "../features/courses/TopicContent";
 import Settings from "../features/settings/Settings";
 import Dictionary from "../features/dictionary/Dictionary";
+import Library from "../features/library/Library";
 import Layout from "../components/ui/Layout";
 
 console.log("App rendering");
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const { setUser } = useUserActions();
+  const setUser = useSetUser();
   const isAuthenticated = useIsAuthenticated();
   const user = useUser();
 
@@ -51,7 +52,7 @@ export default function App() {
         setUser(null);
       }
     });
-  }, [setUser]);
+  }, []); // Removed setUser from dependencies since Zustand actions are stable
 
   if (loading) return <div className="flex items-center justify-center h-screen text-lg">Loading...</div>;
 
@@ -81,8 +82,23 @@ export default function App() {
           <Route path="/grammar/:classId/:courseId/:topicId" element={<TopicContent />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/dictionary" element={<Dictionary />} />
+          <Route path="/library" element={<Library />} />
+
+          {/* Library Routes */}
+          <Route path="/library/textbooks" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">📖 Textbooks Coming Soon</div>} />
+          <Route path="/library/test-papers" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">📝 Test Papers Coming Soon</div>} />
+          <Route path="/library/reference" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">📚 Reference Books Coming Soon</div>} />
+          <Route path="/library/study-materials" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">📰 Study Materials Coming Soon</div>} />
+
+          {/* My Account Routes */}
+          <Route path="/my-courses" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">📚 My Courses Coming Soon</div>} />
+          <Route path="/my-payments" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">💳 My Payments Coming Soon</div>} />
+          <Route path="/progress" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">📊 Progress Coming Soon</div>} />
+          <Route path="/achievements" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">🏆 Achievements Coming Soon</div>} />
+
           <Route path="/quiz" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">Quiz Coming Soon</div>} />
           <Route path="/practice" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">Practice Coming Soon</div>} />
+          <Route path="*" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">Page Not Found</div>} />
         </Routes>
       </Layout>
     </BrowserRouter>

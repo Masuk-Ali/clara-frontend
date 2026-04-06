@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useVocabulary, useVocabularyActions } from '../../store';
+import { useNavigate } from 'react-router-dom';
+import { useVocabulary, useAddWord, useRemoveWord } from '../../store';
 
 // Comprehensive word database with English and Bengali meanings
 const wordDatabase = {
@@ -192,9 +193,12 @@ export default function Dictionary() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
+  const navigate = useNavigate();
+
   // Use Zustand store for vocabulary management
   const vocabulary = useVocabulary();
-  const { addWord, removeWord } = useVocabularyActions();
+  const addWord = useAddWord();
+  const removeWord = useRemoveWord();
 
   // Check if a word is saved
   const isWordSaved = (wordKey) => {
@@ -277,7 +281,17 @@ export default function Dictionary() {
       <div className="max-w-6xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">📖 Dictionary</h1>
+          <div className="flex items-center gap-4 mb-4">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">📖 Dictionary</h1>
+          </div>
           <p className="text-gray-600 text-lg">
             Search for words, learn meanings, and build your vocabulary
           </p>
