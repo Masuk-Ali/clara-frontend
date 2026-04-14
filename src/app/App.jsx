@@ -98,6 +98,10 @@ export default function App() {
 
           <Route path="/quiz" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">Quiz Coming Soon</div>} />
           <Route path="/practice" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">Practice Coming Soon</div>} />
+
+          {/* Question Bank Routes */}
+          <Route path="/question-bank/mcq" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">❓ MCQ Bank Coming Soon</div>} />
+          <Route path="/question-bank/cq" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">📝 CQ Bank Coming Soon</div>} />
           <Route path="*" element={<div className="text-center text-2xl font-bold text-gray-600 mt-20">Page Not Found</div>} />
         </Routes>
       </Layout>

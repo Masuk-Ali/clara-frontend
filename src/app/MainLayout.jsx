@@ -39,8 +39,19 @@ export default function MainLayout({ children }) {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-auto pb-24">
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 overflow-auto pb-24 relative">
+        {/* Sidebar Backdrop */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <div className="absolute left-0 top-0 bottom-0 w-80 bg-white/10 backdrop-blur-xl border-r border-white/20 shadow-2xl overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              <Sidebar onClose={() => setSidebarOpen(false)} />
+            </div>
+          </div>
+        )}
+
         <div className="p-6 max-w-7xl mx-auto">{children}</div>
       </div>
 

@@ -2,6 +2,28 @@ import { educationData } from '../data/classesData';
 import { grammarContent } from '../data/grammarContent';
 import { contentDatabase } from '../data/topicsDatabase';
 
+// Static imports for syllabus data
+import hscEnglish1st from '../data/Syllabus/HSC/English1st.json';
+import hscEnglish2nd from '../data/Syllabus/HSC/English2nd.json';
+import sscEnglish1st from '../data/Syllabus/SSC/English1st.json';
+import sscEnglish2nd from '../data/Syllabus/SSC/English2nd.json';
+import jscEnglish from '../data/Syllabus/JSC/English1st&2nd.json';
+
+// Create a lookup map for syllabus data
+const syllabusDataMap = {
+  'HSC': {
+    'English1st': hscEnglish1st,
+    'English2nd': hscEnglish2nd
+  },
+  'SSC': {
+    'English1st': sscEnglish1st,
+    'English2nd': sscEnglish2nd
+  },
+  'JSC': {
+    'English1st&2nd': jscEnglish
+  }
+};
+
 export class ContentService {
   /**
    * Legacy method - Load content by class/course/topic
@@ -42,27 +64,27 @@ export class ContentService {
 
       } else if (contentType === 'reading') {
         // Load reading content from syllabus
-        const syllabusPath = `../data/Syllabus/${classData.level.toUpperCase()}/${courseData.name.replace(/\s+/g, '')}.json`;
+        const level = classData.level.toUpperCase();
+        const courseName = courseData.name.replace(/\s+/g, '');
 
-        try {
-          const syllabusModule = await import(syllabusPath);
-          const syllabusData = syllabusModule.default;
-          topicContent = syllabusData[topicId];
-          topicName = topicContent?.title || `Reading ${topicId}`;
+        const syllabusData = syllabusDataMap[level]?.[courseName];
 
-          if (!topicContent) {
-            throw new Error('Reading content not found');
-          }
-
-          metadata = {
-            type: 'reading',
-            hasQuestions: !!topicContent.questions?.length,
-            wordCount: topicContent.content?.split(' ').length || 0
-          };
-
-        } catch (err) {
+        if (!syllabusData) {
           throw new Error('Reading content not available');
         }
+
+        topicContent = syllabusData[topicId];
+        topicName = topicContent?.title || `Reading ${topicId}`;
+
+        if (!topicContent) {
+          throw new Error('Reading content not found');
+        }
+
+        metadata = {
+          type: 'reading',
+          hasQuestions: !!topicContent.questions?.length,
+          wordCount: topicContent.content?.split(' ').length || 0
+        };
       }
 
       return {

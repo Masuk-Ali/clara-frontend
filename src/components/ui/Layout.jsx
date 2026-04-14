@@ -50,19 +50,20 @@ export default function Layout({ children, title }) {
         />
       </div>
 
-      {/* Sidebar Overlay (All screens) */}
+      {/* Sidebar Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-full w-80 bg-white shadow-2xl z-50 transition-transform duration-300 transform ${
+        className={`fixed left-0 top-0 h-full w-80 bg-white/10 backdrop-blur-xl border-r border-white/20 shadow-2xl z-50 transition-transform duration-300 transform ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
+        onClick={(e) => e.stopPropagation()}
       >
         <Sidebar
           isOpen={sidebarOpen}

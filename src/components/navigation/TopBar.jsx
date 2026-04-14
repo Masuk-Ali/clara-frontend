@@ -1,16 +1,30 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../services/supabase";
+import { useClearUser } from "../../store";
 
 export default function TopBar({ pageTitle, onMenuToggle }) {
   const [showSearchFocus, setShowSearchFocus] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const navigate = useNavigate();
+  const clearUser = useClearUser();
 
   const handleSearch = (e) => {
     e.preventDefault();
     // TODO: Implement search functionality
     console.log("Searching for:", searchQuery);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      clearUser();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    setShowProfileMenu(false);
   };
 
   return (
@@ -83,10 +97,7 @@ export default function TopBar({ pageTitle, onMenuToggle }) {
             </button>
             <hr className="my-1" />
             <button
-              onClick={() => {
-                // TODO: Implement logout
-                setShowProfileMenu(false);
-              }}
+              onClick={handleLogout}
               className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 transition-colors"
             >
               Logout
