@@ -1,10 +1,17 @@
 import { useState } from 'react';
+import { getRearrangeContent, rearrangeBank } from '../../data/classesData';
 import RuleSection from '../../features/grammar/RuleSection';
 import PracticeEngine from '../../features/grammar/PracticeEngine';
 import QuizEngine from '../../features/grammar/QuizEngine';
+import RearrangeList from './RearrangeList';
+import QuestionEngine from './QuestionEngine';
 
 export default function ContentRenderer({ content, contentType, metadata }) {
-  switch (contentType) {
+  // Prioritize the specific type defined in the content object (e.g., 'rearrange')
+  // Fall back to the generic contentType passed from the course level.
+  const activeType = (content && typeof content === 'object' && content.type) || metadata?.type || contentType;
+
+  switch (activeType) {
     case 'grammar':
       return <GrammarContentRenderer content={content} metadata={metadata} />;
     case 'reading':
@@ -13,6 +20,8 @@ export default function ContentRenderer({ content, contentType, metadata }) {
       return <PracticeContentRenderer content={content} metadata={metadata} />;
     case 'quiz':
       return <QuizContentRenderer content={content} metadata={metadata} />;
+    case 'rearrange':
+      return <RearrangeContentRenderer content={content} metadata={metadata} />;
     default:
       return <UnsupportedContentRenderer contentType={contentType} />;
   }
@@ -107,10 +116,10 @@ function ReadingContentRenderer({ content, metadata }) {
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
       <div className="prose dark:prose-invert max-w-none">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-          {content.title}
+          {content.title || content.name || "Reading Material"}
         </h2>
         <div className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-          {content.content}
+          {content.content || content.passage || (typeof content === 'string' ? content : "")}
         </div>
         {content.author && (
           <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
@@ -122,6 +131,27 @@ function ReadingContentRenderer({ content, metadata }) {
       </div>
     </div>
   );
+}
+
+function RearrangeContentRenderer({ content, metadata }) {
+  const classId = metadata?.classData?.id;
+
+  let tasks = [];
+
+  if (content.items && Array.isArray(content.items)) {
+    tasks = content.items;
+  } else if (content.storyIds && Array.isArray(content.storyIds) && classId) {
+    // Fallback: if storyIds is empty or has only one item, show all rearrange stories
+    const storyIds = content.storyIds.length <= 1 
+      ? rearrangeBank.map((story) => story.id)
+      : content.storyIds;
+
+    tasks = storyIds
+      .map((storyId) => getRearrangeContent(storyId, classId))
+      .filter(Boolean);
+  }
+
+  return <RearrangeList items={tasks} classId={classId} />;
 }
 
 function PracticeContentRenderer({ content, metadata }) {

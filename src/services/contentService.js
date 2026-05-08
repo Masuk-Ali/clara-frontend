@@ -1,4 +1,4 @@
-import { educationData } from '../data/classesData';
+import { educationData, getRearrangeContent, rearrangeBank } from '../data/classesData';
 import { grammarContent } from '../data/grammarContent';
 import { contentDatabase } from '../data/topicsDatabase';
 
@@ -41,50 +41,144 @@ export class ContentService {
         throw new Error('Course not found');
       }
 
+      // --- TOPIC RESOLUTION ---
+      // 1. Try to find the topic in courseData.topics first
+      const topicIndex = parseInt(topicId, 10);
+      const candidateTopics = [];
+
+      if (!isNaN(topicIndex)) {
+        const exactTopic = courseData.topics[topicIndex];
+        if (exactTopic !== undefined) {
+          candidateTopics.push(exactTopic);
+        }
+
+        if (topicIndex > 0) {
+          const oneBasedTopic = courseData.topics[topicIndex - 1];
+          if (oneBasedTopic !== undefined && oneBasedTopic !== exactTopic) {
+            candidateTopics.push(oneBasedTopic);
+          }
+        }
+      }
+
+      const nameTopic = courseData.topics.find(t => 
+        (typeof t === 'object' ? t.name : t).toLowerCase() === topicId.toLowerCase()
+      );
+
+      if (nameTopic && !candidateTopics.includes(nameTopic)) {
+        candidateTopics.push(nameTopic);
+      }
+
       let topicContent = null;
       let topicName = '';
       let metadata = {};
+      let lastError = null;
 
-      if (contentType === 'grammar') {
-        // Load grammar content
-        const grammarTopic = courseData.topics.find(t => t.id === topicId) || topicId;
-        topicContent = grammarContent[grammarTopic];
-        topicName = grammarTopic;
+      const tryLoadCandidate = (directTopic) => {
+        if (!directTopic) return false;
 
-        if (!topicContent) {
-          throw new Error('Grammar topic not found');
+        if (typeof directTopic === 'object') {
+          topicName = directTopic.name || topicId;
+          metadata = {
+            type: directTopic.type || courseData.type || contentType,
+            topicName,
+            classData,
+            courseData,
+            topicId
+          };
+
+          if (directTopic.type === 'rearrange' && Array.isArray(directTopic.storyIds)) {
+            const storyIds = directTopic.storyIds.length <= 1
+              ? rearrangeBank.map((story) => story.id)
+              : directTopic.storyIds;
+
+            const items = storyIds
+              .map((storyId) => getRearrangeContent(storyId, classData.id))
+              .filter(Boolean);
+
+            topicContent = {
+              ...directTopic,
+              items
+            };
+          } else {
+            topicContent = directTopic;
+          }
+
+          return true;
         }
 
-        metadata = {
-          difficulty: topicContent.difficulty,
-          type: 'grammar',
-          hasPractice: !!topicContent.practice?.length,
-          hasQuiz: !!topicContent.quiz?.length
-        };
+        if (contentType === 'grammar' || courseData.type === 'grammar') {
+          const grammarTopic = directTopic;
+          topicContent = grammarContent[grammarTopic];
+          topicName = grammarTopic;
 
-      } else if (contentType === 'reading') {
-        // Load reading content from syllabus
-        const level = classData.level.toUpperCase();
-        const courseName = courseData.name.replace(/\s+/g, '');
+          if (!topicContent) {
+            throw new Error('Grammar topic not found');
+          }
 
-        const syllabusData = syllabusDataMap[level]?.[courseName];
-
-        if (!syllabusData) {
-          throw new Error('Reading content not available');
+          metadata = {
+            difficulty: topicContent.difficulty,
+            type: 'grammar',
+            hasPractice: !!topicContent.practice?.length,
+            hasQuiz: !!topicContent.quiz?.length
+          };
+          return true;
         }
 
-        topicContent = syllabusData[topicId];
-        topicName = topicContent?.title || `Reading ${topicId}`;
+        if (contentType === 'reading' || courseData.type === 'reading') {
+          const levelMap = {
+            'primary': 'JSC',
+            'secondary': 'SSC',
+            'higher': 'HSC'
+          };
+          const levelKey = levelMap[classData.level] || classData.level.toUpperCase();
 
-        if (!topicContent) {
-          throw new Error('Reading content not found');
+          let courseKey = courseData.name.includes('First') ? 'English1st' : 'English2nd';
+          if (levelKey === 'JSC') courseKey = 'English1st&2nd';
+
+          const syllabusData = syllabusDataMap[levelKey]?.[courseKey];
+
+          if (!syllabusData) {
+            throw new Error('Reading content not available');
+          }
+
+          const lookupId = directTopic;
+          topicContent = syllabusData[lookupId];
+          if (!topicContent && !isNaN(topicIndex)) {
+            topicContent = Object.values(syllabusData)[topicIndex];
+          }
+
+          topicName = topicContent?.title || lookupId;
+
+          if (!topicContent) {
+            throw new Error('Reading content not found');
+          }
+
+          metadata = {
+            type: 'reading',
+            hasQuestions: !!topicContent.questions?.length,
+            wordCount: topicContent.content?.split(' ').length || 0
+          };
+          return true;
         }
 
-        metadata = {
-          type: 'reading',
-          hasQuestions: !!topicContent.questions?.length,
-          wordCount: topicContent.content?.split(' ').length || 0
-        };
+        return false;
+      };
+
+      for (const candidate of candidateTopics) {
+        try {
+          if (tryLoadCandidate(candidate)) {
+            break;
+          }
+        } catch (error) {
+          lastError = error;
+          topicContent = null;
+          topicName = '';
+          metadata = {};
+        }
+      }
+
+      if (!topicContent) {
+        throw lastError || new Error('Topic not found');
       }
 
       return {
@@ -112,24 +206,18 @@ export class ContentService {
 
     if (!courseData) return [];
 
-    // For grammar courses, return available grammar topics
-    if (courseData.type === 'grammar') {
-      return courseData.topics.map(topic => ({
-        id: topic,
-        name: topic,
-        type: 'grammar',
-        available: !!grammarContent[topic]
-      }));
-    }
-
-    // For reading courses, we'd need to check syllabus data
-    // For now, return basic topic structure
-    return courseData.topics.map((topic, index) => ({
-      id: index.toString(),
-      name: topic,
-      type: 'reading',
-      available: true
-    }));
+    return courseData.topics.map((topic, index) => {
+      const isObject = typeof topic === 'object';
+      const name = isObject ? topic.name : topic;
+      const type = isObject ? (topic.type || courseData.type) : courseData.type;
+      
+      return {
+        id: index.toString(),
+        name: name,
+        type: type,
+        available: type === 'grammar' ? !!grammarContent[name] : true
+      };
+    });
   }
 
   static validateContent(content, contentType) {

@@ -31,32 +31,38 @@ export default function MainLayout({ children }) {
   const pageTitle = getPageTitle(location.pathname);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      {/* Top Bar */}
-      <TopBar
-        pageTitle={pageTitle}
-        onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
-      />
+    <div className="relative h-screen overflow-hidden">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-[999] bg-black/20"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-      {/* Main Content Area */}
-      <div className="flex-1 overflow-auto pb-24 relative">
-        {/* Sidebar Backdrop */}
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity"
-            onClick={() => setSidebarOpen(false)}
+      <div className="flex h-screen flex-col overflow-hidden bg-gray-50">
+        <TopBar
+          pageTitle={pageTitle}
+          onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
+        />
+
+        <div className="relative flex flex-1 min-h-0 overflow-hidden">
+          <aside
+            className={`fixed inset-y-0 left-0 z-[1000] w-64 flex flex-col bg-white shadow-lg transition-transform duration-300 ${
+              sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
           >
-            <div className="absolute left-0 top-0 bottom-0 w-80 bg-white/10 backdrop-blur-xl border-r border-white/20 shadow-2xl overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex-1 min-h-0 overflow-y-auto">
               <Sidebar onClose={() => setSidebarOpen(false)} />
             </div>
-          </div>
-        )}
+          </aside>
 
-        <div className="p-6 max-w-7xl mx-auto">{children}</div>
+          <main className="min-h-0 min-w-0 flex-1 overflow-y-auto p-6 pb-24">
+            <div className="mx-auto max-w-7xl">{children}</div>
+          </main>
+        </div>
+
+        <BottomBar />
       </div>
-
-      {/* Bottom Navigation Bar */}
-      <BottomBar />
     </div>
   );
 }

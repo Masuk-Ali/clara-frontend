@@ -12,11 +12,11 @@ import Profile from "../features/auth/Profile";
 import Classes from "../features/courses/Classes";
 import Courses from "../features/courses/Courses";
 import Topics from "../features/courses/Topics";
-import SubjectPage from "../features/courses/SubjectPage";
 import TopicContent from "../features/courses/TopicContent";
 import Settings from "../features/settings/Settings";
 import Dictionary from "../features/dictionary/Dictionary";
 import Library from "../features/library/Library";
+import About from "../features/misc/About";
 import Layout from "../components/ui/Layout";
 
 console.log("App rendering");
@@ -77,10 +77,11 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/classes" element={<Classes />} />
           <Route path="/courses/:classId" element={<Courses />} />
-          <Route path="/topics/:classId/:courseId" element={<SubjectPage />} />
+          <Route path="/topics/:classId/:courseId" element={<Topics />} />
           <Route path="/content/:classId/:courseId/:topicId" element={<TopicContent />} />
           <Route path="/grammar/:classId/:courseId/:topicId" element={<TopicContent />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/about" element={<About />} />
           <Route path="/dictionary" element={<Dictionary />} />
           <Route path="/library" element={<Library />} />
 

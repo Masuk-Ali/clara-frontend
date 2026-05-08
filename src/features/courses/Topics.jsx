@@ -55,28 +55,31 @@ export default function Topics() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {topics.map((topic, index) => (
+        {topics.map((topic, index) => {
+          const topicName = typeof topic === 'string' ? topic : topic.name;
+          return (
           <button
-            key={topic}
+            key={topicName}
             onClick={() => navigate(isGrammar ? `/grammar/${classId}/${courseId}/${index}` : `/content/${classId}/${courseId}/${index}`)}
             className="group rounded-3xl border border-gray-200 bg-white p-6 text-left shadow-sm hover:shadow-lg transition"
           >
             <div className="flex items-center justify-between gap-4 mb-4">
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-2xl">
-                {isGrammar ? "📝" : "📚"}
+                {isGrammar ? "📝" : typeof topic === 'object' && topic.type === 'rearrange' ? "🔀" : "📚"}
               </span>
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
-                {isGrammar ? "Grammar" : "Reading"}
+                {isGrammar ? "Grammar" : typeof topic === 'object' && topic.type === 'rearrange' ? "Rearrange" : "Reading"}
               </span>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900">{topic}</h3>
+            <h3 className="text-xl font-semibold text-gray-900">{topicName}</h3>
             <p className="mt-3 text-sm text-gray-600">Continue your {sectionLabel.toLowerCase()} for {selectedClass.name}.</p>
             <div className="mt-6 flex items-center justify-between text-sm text-gray-500">
               <span>{index + 1} of {topics.length}</span>
               <span className="font-semibold text-blue-600 group-hover:text-blue-800">Start</span>
             </div>
           </button>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

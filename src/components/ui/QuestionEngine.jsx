@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 export default function QuestionEngine({
   question = {},
@@ -9,6 +9,24 @@ export default function QuestionEngine({
   const [draggedItems, setDraggedItems] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
+  const [initialDraggedItems, setInitialDraggedItems] = useState([]);
+  const [hint, setHint] = useState(null);
+
+  useEffect(() => {
+    if (question.type === 'rearrange' && question.items) {
+      // Map strings to objects if necessary, using index as ID
+      const normalizedItems = question.items.map((item, idx) => 
+        typeof item === 'string' 
+          ? { id: idx.toString(), text: item } 
+          : { ...item, id: (item.id || idx).toString() }
+      );
+      const shuffledItems = [...normalizedItems].sort(() => Math.random() - 0.5);
+      setDraggedItems(shuffledItems);
+      // Store the initial shuffled order to snap back if incorrect
+      setInitialDraggedItems(shuffledItems);
+
+    }
+  }, [question]);
 
   const handleMCQChange = (optionIndex) => {
     if (!submitted) {
@@ -46,25 +64,20 @@ export default function QuestionEngine({
     }
   };
 
-  const handleRearrangeAdd = (item) => {
-    if (!submitted && question.type === 'rearrange') {
-      if (!draggedItems.includes(item)) {
-        setDraggedItems([...draggedItems, item]);
-      }
-    }
-  };
-
-  const handleRearrangeRemove = (index) => {
-    if (!submitted) {
-      setDraggedItems(draggedItems.filter((_, i) => i !== index));
-    }
+  const handleSentenceDoubleClick = (item) => {
+    if (submitted && isCorrect) return; // Do not show hints if already correct and submitted
+    setHint({ 
+      type: 'Bengali Translation', 
+      text: item.bengaliTranslation || item.translation || 'No translation available',
+      index: item.id
+    });
   };
 
   const checkAnswer = () => {
     let correct = false;
 
     switch (question.type) {
-      case 'mcq':
+      case 'mcq': // Fallthrough for MCQ, fill_blank, drag_drop
         correct = userAnswer === question.correct;
         break;
       case 'fill_blank':
@@ -76,7 +89,15 @@ export default function QuestionEngine({
         correct = JSON.stringify(userAnswer) === JSON.stringify(question.correct);
         break;
       case 'rearrange':
-        correct = JSON.stringify(draggedItems) === JSON.stringify(question.correct);
+        const currentOrder = draggedItems.map(item => parseInt(item.id));
+        correct = JSON.stringify(currentOrder) === JSON.stringify(question.correct);
+        if (!correct) {
+          setTimeout(() => {
+            setSubmitted(false);
+            setDraggedItems(initialDraggedItems); // Snap back to initial shuffled order
+            setIsCorrect(null);
+          }, 1500);
+        }
         break;
       default:
         correct = false;
@@ -89,9 +110,11 @@ export default function QuestionEngine({
 
   const reset = () => {
     setUserAnswer(null);
-    setDraggedItems([]);
+    if (question.type === 'rearrange') setDraggedItems([...question.items].sort(() => Math.random() - 0.5)); // Reshuffle for new attempt
+    else setDraggedItems([]);
     setSubmitted(false);
     setIsCorrect(null);
+    setHint(null);
   };
 
   if (!question || !question.type) {
@@ -203,47 +226,61 @@ export default function QuestionEngine({
 
       case 'rearrange':
         return (
-          <div className="space-y-6">
-            <div>
-              <p className="text-sm text-gray-600 mb-3 font-semibold">Drag items in the correct order:</p>
-              <div className="flex flex-wrap gap-2 p-4 bg-gray-50 rounded-lg">
-                {question.items?.filter((item) => !draggedItems.includes(item)).map((item, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleRearrangeAdd(item)}
-                    className={`px-3 py-2 rounded-lg cursor-pointer font-medium transition ${
-                      submitted
-                        ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                        : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
-                    }`}
-                  >
-                    {item}
-                  </div>
-                ))}
+          <div className="space-y-4">
+            {hint && (
+              <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 p-3 rounded-lg text-sm flex justify-between items-center animate-fade-in">
+                <span className="text-blue-800 dark:text-blue-200">
+                  <strong className="uppercase mr-2">{hint.type}:</strong> {hint.text}
+                </span>
+                <button onClick={() => setHint(null)} className="text-blue-500 hover:text-blue-700">✕</button>
               </div>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-600 mb-3 font-semibold">Your arrangement:</p>
-              <div className="space-y-2 p-4 bg-blue-50 rounded-lg border-2 border-dashed border-blue-300 min-h-16">
-                {draggedItems.length > 0 ? (
-                  draggedItems.map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-white rounded border border-blue-200">
-                      <span className="text-sm font-medium text-gray-800">{index + 1}. {item}</span>
-                      {!submitted && (
-                        <button
-                          onClick={() => handleRearrangeRemove(index)}
-                          className="text-red-600 hover:text-red-800 text-lg leading-none"
+            )}
+            <div className="space-y-2">
+              {draggedItems.map((item, index) => (
+                <div
+                  key={item.id}
+                  draggable={!(submitted && isCorrect)}
+                  onDragStart={(e) => e.dataTransfer.setData('index', index)}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    const fromIndex = e.dataTransfer.getData('index');
+                    const newItems = [...draggedItems];
+                    const [movedItem] = newItems.splice(fromIndex, 1);
+                    newItems.splice(index, 0, movedItem);
+                    setDraggedItems(newItems);
+                  }} // Only allow dropping if not submitted or if submitted and incorrect (to allow snap back)
+                  onDoubleClick={() => handleSentenceDoubleClick(item)}
+                  className={`p-4 rounded-xl border-2 transition-all cursor-pointer select-none flex items-center gap-4 ${
+                    submitted && isCorrect 
+                      ? 'bg-green-50 border-green-500 cursor-default shadow-sm' 
+                      : submitted && !isCorrect 
+                        ? 'bg-red-50 border-red-500 animate-pulse' 
+                        : 'bg-white border-gray-200 hover:border-blue-400 hover:shadow-md active:cursor-grabbing'
+                  }`}
+                >
+                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
+                    {index + 1}
+                  </span>
+                  <div className="text-gray-800 flex-1 flex flex-wrap gap-x-1">
+                    {item.text.split(' ').map((word, wIdx) => {
+                      const cleanWord = word.toLowerCase().replace(/[^\w]/g, '');
+                      const meaning = item.wordMeanings?.[cleanWord];
+                      return (
+                        <span
+                          key={wIdx}
+                          className={`px-0.5 rounded transition-colors ${meaning ? 'cursor-help hover:bg-blue-100 text-blue-700 font-medium' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (meaning) setHint({ type: 'Word Meaning', text: `${word}: ${meaning}` });
+                          }}
                         >
-                          ✕
-                        </button>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-400 text-sm py-4">Click items above to arrange them...</p>
-                )}
-              </div>
+                          {word}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         );
@@ -268,7 +305,7 @@ export default function QuestionEngine({
         <div className="mt-6 flex gap-3">
           <button
             onClick={checkAnswer}
-            disabled={submitted || userAnswer === null}
+            disabled={submitted || (question.type !== 'rearrange' && userAnswer === null) || (question.type === 'rearrange' && draggedItems.length === 0)}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition font-medium"
           >
             Submit Answer

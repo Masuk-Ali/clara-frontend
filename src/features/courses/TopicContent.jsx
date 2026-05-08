@@ -137,6 +137,19 @@ export default function TopicContent() {
     );
   }
 
+  const renderContent = () => {
+    if (!contentData) return null;
+    const { content, metadata } = contentData;
+    const { type, topicName, classData, courseData } = metadata;
+
+    return (
+      <>
+        {renderHeader()}
+        <ContentRenderer content={content} contentType={type} metadata={metadata} />
+      </>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-6xl mx-auto p-6">
