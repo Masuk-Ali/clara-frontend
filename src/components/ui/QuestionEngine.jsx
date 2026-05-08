@@ -12,6 +12,19 @@ export default function QuestionEngine({
   const [initialDraggedItems, setInitialDraggedItems] = useState([]);
   const [hint, setHint] = useState(null);
 
+  // Fisher-Yates Shuffle Algorithm
+  const shuffleArray = (array, correctOrder) => {
+    let shuffled = [...array];
+    do {
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      // Ensure it doesn't start in the correct order
+    } while (shuffled.length > 1 && JSON.stringify(shuffled.map(i => parseInt(i.id))) === JSON.stringify(correctOrder));
+    return shuffled;
+  };
+
   useEffect(() => {
     if (question.type === 'rearrange' && question.items) {
       // Map strings to objects if necessary, using index as ID
@@ -20,7 +33,7 @@ export default function QuestionEngine({
           ? { id: idx.toString(), text: item } 
           : { ...item, id: (item.id || idx).toString() }
       );
-      const shuffledItems = [...normalizedItems].sort(() => Math.random() - 0.5);
+      const shuffledItems = shuffleArray(normalizedItems, question.correct);
       setDraggedItems(shuffledItems);
       // Store the initial shuffled order to snap back if incorrect
       setInitialDraggedItems(shuffledItems);
@@ -94,7 +107,13 @@ export default function QuestionEngine({
         if (!correct) {
           setTimeout(() => {
             setSubmitted(false);
-            setDraggedItems(initialDraggedItems); // Snap back to initial shuffled order
+            // Reshuffle items instead of snapping back to fixed initial order
+            const normalizedItems = question.items.map((item, idx) => 
+              typeof item === 'string' 
+                ? { id: idx.toString(), text: item } 
+                : { ...item, id: (item.id || idx).toString() }
+            );
+            setDraggedItems(shuffleArray(normalizedItems, question.correct));
             setIsCorrect(null);
           }, 1500);
         }
@@ -110,8 +129,16 @@ export default function QuestionEngine({
 
   const reset = () => {
     setUserAnswer(null);
-    if (question.type === 'rearrange') setDraggedItems([...question.items].sort(() => Math.random() - 0.5)); // Reshuffle for new attempt
-    else setDraggedItems([]);
+    if (question.type === 'rearrange') {
+      const normalizedItems = question.items.map((item, idx) => 
+        typeof item === 'string' 
+          ? { id: idx.toString(), text: item } 
+          : { ...item, id: (item.id || idx).toString() }
+      );
+      setDraggedItems(shuffleArray(normalizedItems, question.correct));
+    } else {
+      setDraggedItems([]);
+    }
     setSubmitted(false);
     setIsCorrect(null);
     setHint(null);
