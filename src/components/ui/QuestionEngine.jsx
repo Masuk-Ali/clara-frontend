@@ -298,7 +298,14 @@ export default function QuestionEngine({
                           className={`px-0.5 rounded transition-colors ${meaning ? 'cursor-help hover:bg-blue-100 text-blue-700 font-medium' : ''}`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (meaning) setHint({ type: 'Word Meaning', text: `${word}: ${meaning}` });
+                            if (meaning) {
+                               const en = typeof meaning === 'object' ? meaning.english : "Not available";
+                               const bn = typeof meaning === 'object' ? meaning.bengali : meaning;
+                               setHint({ 
+                                 type: 'Word Meaning', 
+                                 text: `${word.toUpperCase()}\nবাংলা: ${bn}\nEnglish: ${en}` 
+                               });
+                            }
                           }}
                         >
                           {word}

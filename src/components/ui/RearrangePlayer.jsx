@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useRearrange } from '../../hooks/useRearrange';
 
 export default function RearrangePlayer({ story, onBack, classId }) {
@@ -10,23 +10,61 @@ export default function RearrangePlayer({ story, onBack, classId }) {
     selectSentence,
     deselectSentence,
     checkAnswer,
+    showSolution,
+    usedSolution,
+    setHint,
     reset,
   } = useRearrange(story);
 
   const [popup, setPopup] = useState(null); // { type, text, x, y, id }
   const [errorId, setErrorId] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [shuffledPool, setShuffledPool] = useState([]);
   const canSubmit = selectedOrder.length === story.sentences.length && !submitted;
   const progress = (selectedOrder.length / story.sentences.length) * 100;
 
+  // Completion effect
+  useEffect(() => {
+    if (selectedOrder.length === story.sentences.length && !submitted) {
+      checkAnswer();
+    }
+  }, [selectedOrder.length, story.sentences.length, submitted, checkAnswer]);
+
+  // Completion feedback effect
+  useEffect(() => {
+    if (submitted && isCorrect && selectedOrder.length === story.sentences.length && !usedSolution) {
+      setShowSuccess(true);
+      const timer = setTimeout(() => setShowSuccess(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitted, isCorrect, selectedOrder.length, story.sentences.length, usedSolution]);
+
+  const getLetter = useCallback((sentenceId) => {
+    const idx = story.sentences.findIndex(s => Number(s.id) === Number(sentenceId));
+    return String.fromCharCode(97 + (idx === -1 ? 0 : idx)); // 0 -> a, 1 -> b...
+  }, [story.sentences]);
+
   // Fisher-Yates Shuffle Utility
-  const shuffleArray = (array) => {
+  const shuffleArray = useCallback((array) => {
     let shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;
+  }, []);
+
+  // Sound Feedback Helper
+  const playFeedback = (type) => {
+    try {
+      const audio = new Audio(
+        type === 'success' 
+          ? 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3' 
+          : 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'
+      );
+      audio.volume = 0.3;
+      audio.play();
+    } catch (e) { /* Audio fallback */ }
   };
 
   // Auto-close popups
@@ -39,21 +77,33 @@ export default function RearrangePlayer({ story, onBack, classId }) {
 
   // Sync local pool when availableSentences change (items removed)
   useEffect(() => {
-    const currentIds = availableSentences.map(s => s.id).sort().join(',');
-    const existingIds = shuffledPool.map(s => s.id).sort().join(',');
+    const currentIds = availableSentences.map(s => Number(s.id)).sort().join(',');
+    const existingIds = shuffledPool.map(s => Number(s.id)).sort().join(',');
     if (currentIds !== existingIds) {
       setShuffledPool(shuffleArray(availableSentences));
     }
-  }, [availableSentences]);
+  }, [availableSentences, shuffleArray]);
 
   const handleWordClick = (e, word, sentence) => {
     e.stopPropagation();
     const cleanWord = word.toLowerCase().replace(/[^\w]/g, '');
-    const meaning = sentence.wordMeanings?.[cleanWord];
+    if (!cleanWord) return;
+
+    const m = sentence.wordMeanings?.[cleanWord];
+    let displayText = word.toUpperCase();
+
+    if (!m) {
+      displayText += "\nMeaning not available";
+    } else {
+      const en = typeof m === 'object' ? m.english : "Not available";
+      const bn = typeof m === 'object' ? m.bengali : m;
+      
+      displayText += `\nবাংলা: ${bn}\nEnglish: ${en}`;
+    }
 
     setPopup({
       type: 'meaning',
-      text: meaning ? `${word}: ${meaning}` : `${word}: No meaning available`,
+      text: displayText,
       sentenceId: sentence.id,
       id: `w-${sentence.id}-${word}`
     });
@@ -93,12 +143,16 @@ export default function RearrangePlayer({ story, onBack, classId }) {
       // Fix: Compare as numbers to ensure accuracy
       if (Number(sentence.id) === nextExpectedIndex) {
         selectSentence(sentence);
+        playFeedback('success');
         setErrorId(null);
       } else {
+        playFeedback('error');
         setErrorId(sentence.id);
         // Reshuffle ONLY the remaining unsolved sentences on error
-        setShuffledPool(shuffleArray(shuffledPool));
-        setTimeout(() => setErrorId(null), 500);
+        setTimeout(() => {
+          setShuffledPool(shuffleArray(shuffledPool));
+          setErrorId(null);
+        }, 400);
       }
     }
   };
@@ -112,12 +166,20 @@ export default function RearrangePlayer({ story, onBack, classId }) {
         ← Back to Stories
       </button>
 
-      <div className="bg-white dark:bg-gray-800 p-5 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 p-5 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 transition-all duration-500">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-black text-gray-800 dark:text-white">{story.title}</h3>
           <span className="text-xs font-black text-amber-600 bg-amber-50 dark:bg-amber-900/30 px-3 py-1 rounded-full">
             {selectedOrder.length}/{story.sentences.length}
           </span>
+          {!submitted && (
+            <button
+              onClick={showSolution}
+              className="ml-auto text-[10px] font-black text-gray-400 hover:text-amber-600 uppercase tracking-tighter transition-colors"
+            >
+              Show Solution
+            </button>
+          )}
         </div>
         <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
           <div 
@@ -127,18 +189,18 @@ export default function RearrangePlayer({ story, onBack, classId }) {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4 relative">
         {/* Solved Sentences */}
         {selectedOrder.map((sentence, index) => (
           <div
             key={`correct-${sentence.id}`}
             onDoubleClick={(e) => handleDoubleClick(e, sentence)}
-            className="relative p-4 rounded-2xl bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 flex items-start gap-4 animate-in slide-in-from-top-2 duration-300"
+            className="relative p-4 rounded-2xl bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 flex items-start gap-4 animate-in slide-in-from-top-4 duration-500 ease-out"
           >
             {/* Relative Tooltip */}
             {popup && popup.sentenceId === sentence.id && (
               <div
-                className={`absolute left-1/2 -translate-x-1/2 z-[100] px-4 py-2 rounded-xl shadow-2xl pointer-events-none animate-in fade-in zoom-in duration-200 max-w-[280px] text-center text-xs font-bold border transition-all ${
+                className={`absolute left-1/2 -translate-x-1/2 z-[100] px-4 py-2 rounded-xl shadow-2xl pointer-events-none animate-in fade-in zoom-in duration-200 min-w-[180px] max-w-[280px] text-left text-xs font-bold border transition-all whitespace-pre-line ${
                   popup.type === 'meaning' 
                     ? 'bg-indigo-600 text-white border-indigo-400 bottom-full mb-3' 
                     : 'bg-emerald-700 text-white border-emerald-500 top-full mt-3'
@@ -150,9 +212,14 @@ export default function RearrangePlayer({ story, onBack, classId }) {
                 }`} />
               </div>
             )}
-            <span className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center text-[10px] font-black flex-shrink-0">
-              {index + 1}
-            </span>
+            <div className="flex flex-col items-center gap-1 flex-shrink-0 pt-0.5">
+              <span className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center text-[10px] font-black">
+                {index + 1}
+              </span>
+              <span className="text-[10px] font-bold text-green-600/60 uppercase">
+                ({getLetter(sentence.id)})
+              </span>
+            </div>
             <div className="text-sm leading-relaxed text-green-900 dark:text-green-100 font-medium">
               {sentence.text.split(' ').map((word, wIdx) => (
                 <span 
@@ -168,11 +235,11 @@ export default function RearrangePlayer({ story, onBack, classId }) {
         ))}
 
         {/* Unified Pool List */}
-        {shuffledPool.length > 0 && (
+        {!submitted && shuffledPool.length > 0 && (
           <div className="space-y-4 pt-2">
-            {selectedOrder.length > 0 && (
+            {selectedOrder.length > 0 && shuffledPool.length > 0 && (
               <div className="flex items-center gap-3 opacity-30">
-                <div className="h-px bg-gray-400 flex-1"></div>
+                <div className="h-px bg-gray-400 flex-1 animate-pulse"></div>
                 <span className="text-[10px] font-black uppercase tracking-widest">Next Step</span>
                 <div className="h-px bg-gray-400 flex-1"></div>
               </div>
@@ -194,7 +261,7 @@ export default function RearrangePlayer({ story, onBack, classId }) {
                 {/* Relative Tooltip */}
                 {popup && popup.sentenceId === sentence.id && (
                   <div
-                    className={`absolute left-1/2 -translate-x-1/2 z-[100] px-4 py-2 rounded-xl shadow-2xl pointer-events-none animate-in fade-in zoom-in duration-200 max-w-[280px] text-center text-xs font-bold border transition-all ${
+                    className={`absolute left-1/2 -translate-x-1/2 z-[100] px-4 py-2 rounded-xl shadow-2xl pointer-events-none animate-in fade-in zoom-in duration-200 min-w-[180px] max-w-[280px] text-left text-xs font-bold border transition-all whitespace-pre-line ${
                       popup.type === 'meaning' 
                         ? 'bg-indigo-600 text-white border-indigo-400 bottom-full mb-3' 
                         : 'bg-emerald-700 text-white border-emerald-500 top-full mt-3'
@@ -207,6 +274,9 @@ export default function RearrangePlayer({ story, onBack, classId }) {
                   </div>
                 )}
                 <div className="flex items-start gap-4">
+                  <span className="text-sm font-black text-gray-300 dark:text-gray-600 mt-1 uppercase">
+                    {getLetter(sentence.id)})
+                  </span>
                   <div className="flex-1 flex flex-wrap gap-x-2 gap-y-1.5">
                     {sentence.text.split(' ').map((word, wIdx) => (
                       <span
@@ -222,6 +292,14 @@ export default function RearrangePlayer({ story, onBack, classId }) {
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><circle cx="2" cy="2" r="1.5"/><circle cx="6" cy="2" r="1.5"/><circle cx="10" cy="2" r="1.5"/><circle cx="2" cy="6" r="1.5"/><circle cx="6" cy="6" r="1.5"/><circle cx="10" cy="6" r="1.5"/><circle cx="2" cy="10" r="1.5"/><circle cx="6" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/></svg>
                   </div>
                 </div>
+                
+                {/* Mobile Drag Indicator */}
+                <div className="absolute -left-1 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 opacity-20 group-active:opacity-100 transition-opacity">
+                   {[...Array(3)].map((_, i) => (
+                     <div key={i} className="w-1 h-4 bg-gray-400 rounded-full" />
+                   ))}
+                </div>
+
                 {errorId === sentence.id && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">
                     Try again!
@@ -232,6 +310,17 @@ export default function RearrangePlayer({ story, onBack, classId }) {
           </div>
         )}
       </div>
+
+      {/* Gaming Feedback Overlay */}
+      {showSuccess && (
+        <div className="fixed inset-0 flex items-center justify-center z-[200] pointer-events-none bg-black/5 backdrop-blur-[1px]">
+           <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl border-4 border-green-500 animate-in zoom-in slide-in-from-bottom-10 duration-500 text-center">
+              <div className="text-6xl mb-4 animate-bounce">🎉</div>
+              <h2 className="text-3xl font-black text-gray-800 dark:text-white">Well Done!</h2>
+              <p className="text-green-600 font-bold uppercase tracking-widest text-xs mt-2">Story Completed</p>
+           </div>
+        </div>
+      )}
 
       {/* Bottom Action Bar */}
       <div className="pt-8 pb-4 flex gap-4">
