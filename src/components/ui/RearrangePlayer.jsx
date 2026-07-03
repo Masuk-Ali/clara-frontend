@@ -132,15 +132,16 @@ export default function RearrangePlayer({ story, onBack, classId }) {
     const point = e.type.includes('touch') ? e.changedTouches[0] : e;
     const dx = point.clientX - swipeRef.current.x;
     const dy = point.clientY - swipeRef.current.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance > 30) {
+    // Only trigger on deliberate rightward drags: must move right >100px
+    // and be predominantly horizontal (ignore vertical swipes and small accidental moves)
+    if (dx > 100 && Math.abs(dx) > Math.abs(dy)) {
       swipeRef.current.isSwiping = true;
-      
+
       // Check if this is the next correct sentence in the story sequence
       const nextExpectedIndex = story.correctOrder[selectedOrder.length];
-      
-      // Fix: Compare as numbers to ensure accuracy
+
+      // Compare as numbers to ensure accuracy
       if (Number(sentence.id) === nextExpectedIndex) {
         selectSentence(sentence);
         playFeedback('success');
