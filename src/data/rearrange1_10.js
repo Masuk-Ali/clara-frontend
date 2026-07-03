@@ -134,4 +134,140 @@ export const rearrange1_10 = [
   ],
   correctOrder: [0, 1, 2, 3, 4, 5, 8, 6, 7, 9]
 },
+
+{
+  id: "albert_einstein",
+  title: "Albert Einstein",
+  sentences: [
+    {
+      id: 0,
+      text: "Albert Einstein was born in Germany in 1879.",
+      wordMeanings: {},
+      bengaliTranslation: "আলবার্ট আইনস্টাইন ১৮৭৯ সালে জার্মানিতে জন্মগ্রহণ করেন।"
+    },
+    {
+      id: 1,
+      text: "His father was a businessman.",
+      wordMeanings: {},
+      bengaliTranslation: "তার বাবা একজন ব্যবসায়ী ছিলেন।"
+    },
+    {
+      id: 2,
+      text: "When the business failed, the family moved to Milan.",
+      wordMeanings: {},
+      bengaliTranslation: "ব্যবসায় ব্যর্থ হলে পরিবারটি মিলানে চলে যায়।"
+    },
+    {
+      id: 3,
+      text: "He completed his secondary education from a high school in Aarau.",
+      wordMeanings: {},
+      bengaliTranslation: "তিনি আরাউ-এর একটি উচ্চ বিদ্যালয় থেকে মাধ্যমিক শিক্ষা সম্পন্ন করেন।"
+    },
+    {
+      id: 4,
+      text: "He got admitted in Swiss Federal Institute of Technology in 1896.",
+      wordMeanings: {},
+      bengaliTranslation: "১৮৯৬ সালে তিনি সুইস ফেডারেল ইনস্টিটিউট অব টেকনোলজিতে ভর্তি হন।"
+    },
+    {
+      id: 5,
+      text: "He graduated in 1900.",
+      wordMeanings: {},
+      bengaliTranslation: "তিনি ১৯০০ সালে স্নাতক সম্পন্ন করেন।"
+    },
+    {
+      id: 6,
+      text: "For the next couple of years, he taught mathematics and physics in a secondary school.",
+      wordMeanings: {},
+      bengaliTranslation: "পরবর্তী কয়েক বছর তিনি একটি মাধ্যমিক বিদ্যালয়ে গণিত ও পদার্থবিজ্ঞান পড়ান।"
+    },
+    {
+      id: 7,
+      text: "He received a regular appointment at the University of Zurich.",
+      wordMeanings: {},
+      bengaliTranslation: "তিনি জুরিখ বিশ্ববিদ্যালয়ে নিয়মিত নিয়োগ পান।"
+    },
+    {
+      id: 8,
+      text: "He obtained a Ph.D. degree from the University of Zurich.",
+      wordMeanings: {},
+      bengaliTranslation: "তিনি জুরিখ বিশ্ববিদ্যালয় থেকে পিএইচডি ডিগ্রি অর্জন করেন।"
+    },
+    {
+      id: 9,
+      text: "In 1921, Einstein received the Nobel Prize in Physics.",
+      wordMeanings: {},
+      bengaliTranslation: "১৯২১ সালে আইনস্টাইন পদার্থবিজ্ঞানে নোবেল পুরস্কার পান।"
+    }
+  ],
+  correctOrder: [0, 1, 2, 3, 4, 5, 6, 8, 7, 9]
+},
+
+{
+  id: "honest_tax_collector",
+  title: "The Honest Tax Collector",
+  sentences: [
+    {
+      id: 0,
+      text: "Then he invited applicants.",
+      wordMeanings: {},
+      bengaliTranslation: "তারপর তিনি প্রার্থীদের আমন্ত্রণ জানালেন।"
+    },
+    {
+      id: 1,
+      text: "The applicants were asked to meet the Sultan one by one.",
+      wordMeanings: {},
+      bengaliTranslation: "প্রার্থীদের একজন একজন করে সুলতানের সাথে দেখা করতে বলা হলো।"
+    },
+    {
+      id: 2,
+      text: "Long ago, there lived a Sultan in a country.",
+      wordMeanings: {},
+      bengaliTranslation: "অনেক দিন আগে একটি দেশে একজন সুলতান বাস করতেন।"
+    },
+    {
+      id: 3,
+      text: "Then he found the desired man.",
+      wordMeanings: {},
+      bengaliTranslation: "অবশেষে তিনি কাঙ্ক্ষিত লোকটিকে খুঁজে পেলেন।"
+    },
+    {
+      id: 4,
+      text: "He wanted to appoint an honest man as his tax collector.",
+      wordMeanings: {},
+      bengaliTranslation: "তিনি একজন সৎ লোককে কর আদায়কারী হিসেবে নিয়োগ দিতে চেয়েছিলেন।"
+    },
+    {
+      id: 5,
+      text: "A number of people applied for the job.",
+      wordMeanings: {},
+      bengaliTranslation: "অনেক লোক চাকরির জন্য আবেদন করল।"
+    },
+    {
+      id: 6,
+      text: "All the applicants blushed and refused except one.",
+      wordMeanings: {},
+      bengaliTranslation: "একজন ছাড়া সব প্রার্থী লজ্জা পেল এবং অস্বীকার করল।"
+    },
+    {
+      id: 7,
+      text: "So, he asked for the wise counselor’s advice.",
+      wordMeanings: {},
+      bengaliTranslation: "তাই তিনি জ্ঞানী উপদেষ্টার পরামর্শ চাইলেন।"
+    },
+    {
+      id: 8,
+      text: "When they all arrived, Sultan asked them to dance.",
+      wordMeanings: {},
+      bengaliTranslation: "সবাই এলে সুলতান তাদের নাচতে বললেন।"
+    },
+    {
+      id: 9,
+      text: "They came through a passage where gold coins were kept.",
+      wordMeanings: {},
+      bengaliTranslation: "তারা এমন একটি পথ দিয়ে এল যেখানে স্বর্ণমুদ্রা রাখা ছিল।"
+    }
+  ],
+  correctOrder: [2, 4, 7, 0, 5, 1, 9, 8, 6, 3]
+}
 ];
