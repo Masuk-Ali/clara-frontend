@@ -371,7 +371,7 @@ export const educationData = [
                 name: "Rearrange",
                 type: "rearrange",
                 storyIds: [
-                  "thirsty_crow",
+                  "ibn_sina",
                   "dog_and_shadow",
                   "robert_bruce",
                   "sheikh_saadi",
