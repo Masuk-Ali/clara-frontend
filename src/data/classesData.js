@@ -372,14 +372,7 @@ export const educationData = [
                 type: "rearrange",
                 storyIds: [
                   "ibn_sina",
-                  "dog_and_shadow",
-                  "robert_bruce",
-                  "sheikh_saadi",
-                  "lion_and_mouse",
-                  "nelson_mandela",
-                  "importance_of_education",
-                  "value_of_time",
-                  "env_pollution"
+                  "ibn_batuta"
                 ]
               },
               "Novel 1",
