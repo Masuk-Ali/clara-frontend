@@ -17,6 +17,9 @@ const login = async () => {
 const loginWithGoogle = async () => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
+    options: {
+      redirectTo: window.location.origin,
+    },
   });
   if (error) alert(error.message);
 };
