@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import DashboardCard from "./DashboardCard";
 import { educationData } from "../../data/classesData";
+import usePWAInstall from "../../hooks/usePWAInstall";
 
 export default function Dashboard() {
+  const { isInstallable, install } = usePWAInstall();
   const navigate = useNavigate();
 
   // Sample user data
@@ -41,6 +43,27 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
+
+      {isInstallable && (
+  <div className="bg-blue-600 text-white rounded-xl p-4 mb-6 flex items-center justify-between">
+    <div>
+      <h2 className="font-bold text-lg">
+        📲 Install Clara
+      </h2>
+
+      <p className="text-sm opacity-90">
+        Install Clara for a faster, app-like experience.
+      </p>
+    </div>
+
+    <button
+      onClick={install}
+      className="bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg hover:bg-gray-100"
+    >
+      Install
+    </button>
+  </div>
+)}
       {/* Top Section - Selected Class & Course Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Selected Class & Course */}
