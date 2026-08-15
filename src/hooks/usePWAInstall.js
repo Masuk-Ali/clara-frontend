@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
+import {
+  setDeferredPrompt,
+  getDeferredPrompt,
+  clearDeferredPrompt,
+} from "../services/pwaService";
 
 export default function usePWAInstall() {
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
@@ -21,15 +25,17 @@ export default function usePWAInstall() {
   }, []);
 
   const install = async () => {
-    if (!deferredPrompt) return;
+      const prompt = getDeferredPrompt();
 
-    deferredPrompt.prompt();
+      if (!prompt) return;
 
-    const result = await deferredPrompt.userChoice;
+      prompt.prompt();
+
+      const result = await prompt.userChoice;
 
     console.log("Install result:", result.outcome);
 
-    setDeferredPrompt(null);
+    clearDeferredPrompt();
     setIsInstallable(false);
   };
 

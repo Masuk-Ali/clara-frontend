@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../services/supabase";
-import { useClearUser } from "../../store";
+import { useClearUser, useGuestMode, useSetGuestMode } from "../../store";
 
 export default function TopBar({ pageTitle, onMenuToggle }) {
   const [showSearchFocus, setShowSearchFocus] = useState(false);
@@ -9,6 +9,8 @@ export default function TopBar({ pageTitle, onMenuToggle }) {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const navigate = useNavigate();
   const clearUser = useClearUser();
+  const guestMode = useGuestMode();
+  const setGuestMode = useSetGuestMode();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -16,16 +18,23 @@ export default function TopBar({ pageTitle, onMenuToggle }) {
     console.log("Searching for:", searchQuery);
   };
 
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      clearUser();
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout error:', error);
+ const handleLogout = async () => {
+  try {
+    if (guestMode) {
+      setGuestMode(false);
+      navigate('/');
+      return;
     }
-    setShowProfileMenu(false);
-  };
+
+    await supabase.auth.signOut();
+    clearUser();
+    navigate('/login');
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
+
+  setShowProfileMenu(false);
+};
 
   return (
     <div className="flex items-center justify-between px-6 py-4 bg-white shadow-md border-b border-gray-200">

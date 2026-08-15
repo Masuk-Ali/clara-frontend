@@ -1,3 +1,4 @@
+
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
@@ -9,11 +10,15 @@ export const useAppStore = create()(
     (set, get) => ({
       // Initial state
       user: null,
+      guestMode: false,
       vocabulary: [],
       progress: {},
 
       // User actions
       setUser: (user) => set({ user }),
+      setGuestMode: (enabled) => set({
+      guestMode: enabled,
+      }),
 
       updateUser: (updates) => set((state) => ({
         user: state.user ? { ...state.user, ...updates } : null
@@ -92,6 +97,7 @@ export const useAppStore = create()(
       // Utility actions
       reset: () => set({
         user: null,
+        guestMode: false,
         vocabulary: [],
         progress: {}
       })
@@ -102,6 +108,7 @@ export const useAppStore = create()(
       // Only persist certain parts of the state
       partialize: (state) => ({
         user: state.user,
+        guestMode: state.guestMode,
         vocabulary: state.vocabulary,
         progress: state.progress
       })
@@ -136,5 +143,7 @@ export const useUpdateProgress = () => useAppStore((state) => state.updateProgre
 export const useCompleteTopic = () => useAppStore((state) => state.completeTopic);
 export const useResetProgress = () => useAppStore((state) => state.resetProgress);
 export const useClearAllProgress = () => useAppStore((state) => state.clearAllProgress);
+export const useGuestMode = () => useAppStore((state) => state.guestMode);
+export const useSetGuestMode = () => useAppStore((state) => state.setGuestMode);
 
 export default useAppStore;

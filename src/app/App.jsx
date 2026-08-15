@@ -1,7 +1,12 @@
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../services/supabase";
-import { useSetUser, useIsAuthenticated, useUser } from "../store";
+import {
+  useSetUser,
+  useIsAuthenticated,
+  useUser,
+  useGuestMode
+} from "../store";
 
 import Login from "../features/auth/Login";
 import Signup from "../features/auth/Signup";
@@ -18,6 +23,7 @@ import Dictionary from "../features/dictionary/Dictionary";
 import Library from "../features/library/Library";
 import About from "../features/misc/About";
 import Layout from "../components/ui/Layout";
+import Landing from "../features/landing/Landing";
 
 console.log("App rendering");
 
@@ -26,6 +32,7 @@ export default function App() {
   const setUser = useSetUser();
   const isAuthenticated = useIsAuthenticated();
   const user = useUser();
+  const guestMode = useGuestMode();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -56,11 +63,12 @@ export default function App() {
 
   if (loading) return <div className="flex items-center justify-center h-screen text-lg">Loading...</div>;
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !guestMode) {
     return (
       <HashRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

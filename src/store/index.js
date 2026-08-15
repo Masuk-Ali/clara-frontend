@@ -20,5 +20,7 @@ export {
   useUpdateProgress,
   useCompleteTopic,
   useResetProgress,
-  useClearAllProgress
+  useClearAllProgress,
+  useGuestMode,
+  useSetGuestMode
 } from './appStore';
