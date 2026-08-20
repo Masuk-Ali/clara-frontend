@@ -23,7 +23,7 @@ import Dictionary from "../features/dictionary/Dictionary";
 import Library from "../features/library/Library";
 import About from "../features/misc/About";
 import Layout from "../components/ui/Layout";
-import Landing from "../features/landing/Landing";
+import Landing from "../features/landing/landing";
 
 console.log("App rendering");
 
