@@ -372,7 +372,9 @@ export const educationData = [
                 type: "rearrange",
                 storyIds: [
                   "ibn_sina",
-                  "ibn_batuta"
+                  "ibn_batuta",
+                  "albert_einstein",
+                  "honest_tax_collector",
                 ]
               },
               "Novel 1",

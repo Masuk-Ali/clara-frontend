@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import RearrangePlayer from './RearrangePlayer';
+import { canGuestAccess } from '../../services/accessControl';
+import { useGuestMode } from '../../store';
+import GuestAccessPrompt from '../../components/ui/GuestAccessPrompt';
 
 export default function RearrangeList({ items, classId }) {
   const [selectedStory, setSelectedStory] = useState(null);
+  const isGuest = useGuestMode();
+  const [showGuestPrompt, setShowGuestPrompt] = useState(false);
 
   if (!items || items.length === 0) {
     return (
@@ -43,7 +48,15 @@ export default function RearrangeList({ items, classId }) {
         {items.map((item, index) => (
           <button
             key={item.id || index}
-            onClick={() => setSelectedStory(item)}
+            onClick={() => {
+  if (isGuest && !canGuestAccess('rearrange', index)) {
+    console.log('Guest access restricted:', item.id);
+    setShowGuestPrompt(true);
+    return;
+  }
+
+  setSelectedStory(item);
+}}
             className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-all border-l-4 border-amber-500 text-left group"
           >
             <div className="flex items-start justify-between mb-2">
@@ -68,6 +81,15 @@ export default function RearrangeList({ items, classId }) {
           </button>
         ))}
       </div>
+      {showGuestPrompt && (
+  <GuestAccessPrompt
+    onClose={() => setShowGuestPrompt(false)}
+    onSignUp={() => {
+      setShowGuestPrompt(false);
+    }}
+  />
+)}
     </div>
+    
   );
 }
