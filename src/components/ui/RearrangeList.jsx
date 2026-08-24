@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import RearrangePlayer from './RearrangePlayer';
 import { canGuestAccess } from '../../services/accessControl';
 import { useGuestMode } from '../../store';
@@ -8,6 +9,7 @@ export default function RearrangeList({ items, classId }) {
   const [selectedStory, setSelectedStory] = useState(null);
   const isGuest = useGuestMode();
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
+  const navigate = useNavigate();
 
   if (!items || items.length === 0) {
     return (
@@ -86,6 +88,7 @@ export default function RearrangeList({ items, classId }) {
     onClose={() => setShowGuestPrompt(false)}
     onSignUp={() => {
       setShowGuestPrompt(false);
+       navigate('/signup');
     }}
   />
 )}

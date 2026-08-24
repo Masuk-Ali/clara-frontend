@@ -25,7 +25,6 @@ import About from "../features/misc/About";
 import Layout from "../components/ui/Layout";
 import Landing from "../features/landing/landing";
 
-console.log("App rendering");
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -81,6 +80,8 @@ export default function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/classes" element={<Classes />} />
