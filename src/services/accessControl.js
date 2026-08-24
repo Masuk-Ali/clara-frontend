@@ -1,6 +1,6 @@
 // Guest access limits for Clara
 const GUEST_LIMITS = {
-  rearrange: 3,
+  rearrange: 50,
 };
 
 export function canGuestAccess(type, index) {
