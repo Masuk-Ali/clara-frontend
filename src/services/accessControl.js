@@ -1,6 +1,13 @@
 // Guest access limits for Clara
 const GUEST_LIMITS = {
-  rearrange: 50,
+  rearrange: 3,
+  grammar: 3,
+  practice: 3,
+  quiz: 2,
+  questionBank: 5,
+  dictionary: 5,
+  askClara: 3,
+  library: 2,
 };
 
 export function canGuestAccess(type, index) {
