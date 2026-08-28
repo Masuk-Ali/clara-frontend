@@ -1,6 +1,6 @@
 // Guest access limits for Clara
 const GUEST_LIMITS = {
-  rearrange: 3,
+  rearrange: 100,
   grammar: 3,
   practice: 3,
   quiz: 2,
