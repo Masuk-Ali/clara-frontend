@@ -1,0 +1,555 @@
+{
+  "id": "class10_seen_1",
+  "title": "Meherjan Lives in a Slum",
+
+  "passage": "Meherjan lives in a slum on the Sirajgonj Town Protection Embankment. Her polythene roofed shelter looks like a cage. She is nearly 45 but looks more than her age. In front of her shelter, she is trying to make a fire to cook the day's only meal. Her weak hands tremble as she adds some fallen leaves and straw to the fire. The whispering wind from the river Jamuna makes the fire unsteady. The dancing of the flames reminds Meherjan of the turmoil in her life. Not long ago Meherjan had everything—a family, cultivable land and cattle. The erosion of the Jamuna consumed gradually all her landed property. It finally claimed her last shelter during the last monsoon. It took the river only a day to demolish Meherjan's house, trees, vegetable garden and the bamboo bush. She had a happy family once. Over the years, she lost her husband and her family to diseases that cruel hunger and poverty brought to the family. Now, she is the only one left to live on with the loss and the pain. The greedy Jamuna has shattered her dreams and happiness. There are thousand others waiting to share the same fate with Meherjan. Bangladesh is a land of rivers that affect its people. Erosion is a harsh reality for the people living along the river banks. During each monsoon many more villages are threatened by the roaring of rivers like the Jamuna, the roaring Padma and the Meghna. It is estimated that river erosion makes at least 100,000 people homeless every year in Bangladesh. In fact, river erosion is one of the main dangers caused by climate change. If we can't take prompt actions to adapt to climate change, there will be thousands of more Meherjans in our towns and villages every year.",
+
+  "sentences": [
+    {
+      "id": 0,
+      "text": "Meherjan lives in a slum on the Sirajgonj Town Protection Embankment.",
+      "bengaliMeaning": "মেহেরজান সিরাজগঞ্জ টাউন প্রোটেকশন বাঁধের ওপর একটি বস্তিতে বাস করে.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "Meherjan",
+        "verb": "lives",
+        "prepositionalPhrase": "in a slum on the Sirajgonj Town Protection Embankment",
+        "analysis": "The sentence states a fact about where Meherjan lives."
+      }
+    },
+    {
+      "id": 1,
+      "text": "Her polythene roofed shelter looks like a cage.",
+      "bengaliMeaning": "তার পলিথিন-ছাওয়া আশ্রয়স্থলটি একটি খাঁচার মতো দেখায়.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "Her polythene roofed shelter",
+        "verb": "looks",
+        "complement": "like a cage",
+        "analysis": "The verb 'looks' is a linking verb followed by the complement 'like a cage'."
+      }
+    },
+    {
+      "id": 2,
+      "text": "She is nearly 45 but looks more than her age.",
+      "bengaliMeaning": "তার বয়স প্রায় ৪৫, কিন্তু তাকে তার বয়সের চেয়ে বেশি বয়স্ক দেখায়.",
+      "forensic": {
+        "sentenceType": "Compound Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "She",
+        "verbs": [
+          "is",
+          "looks"
+        ],
+        "conjunction": "but",
+        "analysis": "Two independent clauses are joined by the coordinating conjunction 'but'."
+      }
+    },
+    {
+      "id": 3,
+      "text": "In front of her shelter, she is trying to make a fire to cook the day's only meal.",
+      "bengaliMeaning": "তার আশ্রয়স্থলের সামনে সে দিনের একমাত্র খাবার রান্না করার জন্য আগুন জ্বালানোর চেষ্টা করছে.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Present Continuous Tense",
+        "subject": "she",
+        "verb": "is trying",
+        "infinitive": "to make",
+        "purpose": "to cook the day's only meal",
+        "analysis": "The main verb 'is trying' is in the Present Continuous Tense. 'To make' and 'to cook' are infinitives."
+      }
+    },
+    {
+      "id": 4,
+      "text": "Her weak hands tremble as she adds some fallen leaves and straw to the fire.",
+      "bengaliMeaning": "আগুনে কিছু শুকনো পাতা ও খড় দেওয়ার সময় তার দুর্বল হাত কাঁপে.",
+      "forensic": {
+        "sentenceType": "Complex Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "Her weak hands",
+        "mainVerb": "tremble",
+        "subordinateClause": "as she adds some fallen leaves and straw to the fire",
+        "analysis": "The main clause is 'Her weak hands tremble' and the subordinate clause begins with 'as'."
+      }
+    },
+    {
+      "id": 5,
+      "text": "The whispering wind from the river Jamuna makes the fire unsteady.",
+      "bengaliMeaning": "যমুনা নদী থেকে আসা ফিসফিস করা বাতাস আগুনকে অস্থির করে তোলে.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "The whispering wind from the river Jamuna",
+        "verb": "makes",
+        "object": "the fire",
+        "objectComplement": "unsteady",
+        "analysis": "The verb 'makes' takes 'the fire' as its object and 'unsteady' as the object complement."
+      }
+    },
+    {
+      "id": 6,
+      "text": "The dancing of the flames reminds Meherjan of the turmoil in her life.",
+      "bengaliMeaning": "শিখার নাচন মেহেরজানকে তার জীবনের অস্থিরতার কথা মনে করিয়ে দেয়.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "The dancing of the flames",
+        "verb": "reminds",
+        "object": "Meherjan",
+        "prepositionalPhrase": "of the turmoil in her life",
+        "analysis": "The gerund phrase 'The dancing of the flames' functions as the subject of the sentence."
+      }
+    },
+    {
+      "id": 7,
+      "text": "Not long ago Meherjan had everything—a family, cultivable land and cattle.",
+      "bengaliMeaning": "খুব বেশি দিন আগে মেহেরজানের সবকিছু ছিল—একটি পরিবার, চাষযোগ্য জমি এবং গবাদি পশু.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Past Tense",
+        "subject": "Meherjan",
+        "verb": "had",
+        "object": "everything",
+        "analysis": "The sentence describes Meherjan's possessions in the past."
+      }
+    },
+    {
+      "id": 8,
+      "text": "The erosion of the Jamuna consumed gradually all her landed property.",
+      "bengaliMeaning": "যমুনার ভাঙন ধীরে ধীরে তার সমস্ত জমিজমা গ্রাস করেছিল.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Past Tense",
+        "subject": "The erosion of the Jamuna",
+        "verb": "consumed",
+        "adverb": "gradually",
+        "object": "all her landed property",
+        "analysis": "The sentence describes an action completed in the past."
+      }
+    },
+    {
+      "id": 9,
+      "text": "It finally claimed her last shelter during the last monsoon.",
+      "bengaliMeaning": "অবশেষে গত বর্ষায় এটি তার শেষ আশ্রয়টিও কেড়ে নেয়.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Past Tense",
+        "subject": "It",
+        "verb": "claimed",
+        "object": "her last shelter",
+        "timePhrase": "during the last monsoon",
+        "analysis": "The pronoun 'It' refers to the erosion of the Jamuna."
+      }
+    },
+    {
+      "id": 10,
+      "text": "It took the river only a day to demolish Meherjan's house, trees, vegetable garden and the bamboo bush.",
+      "bengaliMeaning": "মেহেরজানের বাড়ি, গাছপালা, সবজির বাগান এবং বাঁশঝাড় ধ্বংস করতে নদীটির মাত্র একদিন সময় লেগেছিল.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Past Tense",
+        "subject": "It",
+        "verb": "took",
+        "object": "the river",
+        "infinitivePhrase": "to demolish Meherjan's house, trees, vegetable garden and the bamboo bush",
+        "analysis": "The structure 'It took + object + time + infinitive' expresses the amount of time required for an action."
+      }
+    },
+    {
+      "id": 11,
+      "text": "She had a happy family once.",
+      "bengaliMeaning": "একসময় তার একটি সুখী পরিবার ছিল.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Past Tense",
+        "subject": "She",
+        "verb": "had",
+        "object": "a happy family",
+        "adverb": "once",
+        "analysis": "The sentence describes a past condition."
+      }
+    },
+    {
+      "id": 12,
+      "text": "Over the years, she lost her husband and her family to diseases that cruel hunger and poverty brought to the family.",
+      "bengaliMeaning": "বছরের পর বছর ধরে নিষ্ঠুর ক্ষুধা ও দারিদ্র্য যে রোগগুলো পরিবারটির জন্য নিয়ে এসেছিল, সেসব রোগে সে তার স্বামী ও পরিবারকে হারিয়েছে.",
+      "forensic": {
+        "sentenceType": "Complex Sentence",
+        "tense": "Simple Past Tense",
+        "subject": "she",
+        "mainVerb": "lost",
+        "object": "her husband and her family",
+        "relativeClause": "that cruel hunger and poverty brought to the family",
+        "analysis": "The relative pronoun 'that' introduces a relative clause modifying 'diseases'."
+      }
+    },
+    {
+      "id": 13,
+      "text": "Now, she is the only one left to live on with the loss and the pain.",
+      "bengaliMeaning": "এখন সে-ই একমাত্র ব্যক্তি, যে ক্ষতি ও বেদনা নিয়ে বেঁচে আছে.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "she",
+        "verb": "is",
+        "complement": "the only one left to live on with the loss and the pain",
+        "analysis": "The infinitive phrase 'to live on with the loss and the pain' describes the purpose or condition of the remaining person."
+      }
+    },
+    {
+      "id": 14,
+      "text": "The greedy Jamuna has shattered her dreams and happiness.",
+      "bengaliMeaning": "লোভী যমুনা তার স্বপ্ন ও সুখ চূর্ণবিচূর্ণ করে দিয়েছে.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Present Perfect Tense",
+        "subject": "The greedy Jamuna",
+        "verb": "has shattered",
+        "object": "her dreams and happiness",
+        "analysis": "The Present Perfect form 'has shattered' describes a completed action whose effect remains relevant."
+      }
+    },
+    {
+      "id": 15,
+      "text": "There are thousand others waiting to share the same fate with Meherjan.",
+      "bengaliMeaning": "মেহেরজানের মতো একই পরিণতি ভাগ করে নেওয়ার জন্য আরও হাজার হাজার মানুষ অপেক্ষা করছে.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Present Tense",
+        "structure": "There + be",
+        "verb": "are",
+        "subject": "thousand others",
+        "participlePhrase": "waiting to share the same fate with Meherjan",
+        "analysis": "The sentence uses existential 'there' to introduce the existence of other people."
+      }
+    },
+    {
+      "id": 16,
+      "text": "Bangladesh is a land of rivers that affect its people.",
+      "bengaliMeaning": "বাংলাদেশ নদীমাতৃক একটি দেশ, যা তার মানুষকে প্রভাবিত করে.",
+      "forensic": {
+        "sentenceType": "Complex Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "Bangladesh",
+        "verb": "is",
+        "complement": "a land of rivers",
+        "relativeClause": "that affect its people",
+        "analysis": "The relative clause 'that affect its people' modifies 'rivers'."
+      }
+    },
+    {
+      "id": 17,
+      "text": "Erosion is a harsh reality for the people living along the river banks.",
+      "bengaliMeaning": "নদীর তীরে বসবাসকারী মানুষের জন্য ভাঙন একটি কঠিন বাস্তবতা.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "Erosion",
+        "verb": "is",
+        "complement": "a harsh reality",
+        "participlePhrase": "living along the river banks",
+        "analysis": "The present participle phrase 'living along the river banks' modifies 'the people'."
+      }
+    },
+    {
+      "id": 18,
+      "text": "During each monsoon many more villages are threatened by the roaring of rivers like the Jamuna, the Padma and the Meghna.",
+      "bengaliMeaning": "প্রতিটি বর্ষায় যমুনা, পদ্মা ও মেঘনার মতো নদীর গর্জনে আরও অনেক গ্রাম হুমকির মুখে পড়ে.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Present Passive",
+        "subject": "many more villages",
+        "verb": "are threatened",
+        "agent": "by the roaring of rivers like the Jamuna, the Padma and the Meghna",
+        "timePhrase": "During each monsoon",
+        "analysis": "The sentence is in the passive voice. 'Are threatened' is the present passive form."
+      }
+    },
+    {
+      "id": 19,
+      "text": "It is estimated that river erosion makes at least 100,000 people homeless every year in Bangladesh.",
+      "bengaliMeaning": "অনুমান করা হয় যে বাংলাদেশে নদীভাঙনের কারণে প্রতি বছর অন্তত এক লাখ মানুষ গৃহহীন হয়.",
+      "forensic": {
+        "sentenceType": "Complex Sentence",
+        "tense": "Simple Present Passive",
+        "subject": "It",
+        "verb": "is estimated",
+        "thatClause": "that river erosion makes at least 100,000 people homeless every year in Bangladesh",
+        "analysis": "The sentence begins with an introductory passive construction followed by a that-clause."
+      }
+    },
+    {
+      "id": 20,
+      "text": "In fact, river erosion is one of the main dangers caused by climate change.",
+      "bengaliMeaning": "প্রকৃতপক্ষে, নদীভাঙন জলবায়ু পরিবর্তনের কারণে সৃষ্ট প্রধান বিপদগুলোর একটি.",
+      "forensic": {
+        "sentenceType": "Assertive Sentence",
+        "tense": "Simple Present Tense",
+        "subject": "river erosion",
+        "verb": "is",
+        "complement": "one of the main dangers caused by climate change",
+        "analysis": "The phrase 'caused by climate change' is a past participial phrase modifying 'dangers'."
+      }
+    },
+    {
+      "id": 21,
+      "text": "If we can't take prompt actions to adapt to climate change, there will be thousands of more Meherjans in our towns and villages every year.",
+      "bengaliMeaning": "আমরা যদি জলবায়ু পরিবর্তনের সঙ্গে খাপ খাওয়ানোর জন্য দ্রুত পদক্ষেপ নিতে না পারি, তাহলে প্রতি বছর আমাদের শহর ও গ্রামে আরও হাজার হাজার মেহেরজান থাকবে.",
+      "forensic": {
+        "sentenceType": "Complex Conditional Sentence",
+        "tense": "First Conditional",
+        "conditionClause": "If we can't take prompt actions to adapt to climate change",
+        "mainClause": "there will be thousands of more Meherjans in our towns and villages every year",
+        "analysis": "The sentence expresses a possible future consequence using an if-clause and 'will'."
+      }
+    }
+  ],
+
+  "wordData": {
+    "slum": {
+      "english": "A crowded area where poor people live in poor-quality housing.",
+      "bengali": "বস্তি",
+      "pronunciation": "/slʌm/",
+      "example": "Many poor families live in a slum."
+    },
+    "embankment": {
+      "english": "A wall or bank built to prevent water from flooding an area.",
+      "bengali": "বাঁধ",
+      "pronunciation": "/ɪmˈbæŋkmənt/",
+      "example": "The village is protected by an embankment."
+    },
+    "cultivable": {
+      "english": "Suitable for growing crops.",
+      "bengali": "চাষযোগ্য",
+      "pronunciation": "/ˈkʌltɪvəbl/",
+      "example": "The area has a large amount of cultivable land."
+    },
+    "erosion": {
+      "english": "The gradual destruction of land by water, wind, or other natural forces.",
+      "bengali": "ভাঙন; ক্ষয়",
+      "pronunciation": "/ɪˈrəʊʒən/",
+      "example": "River erosion makes many people homeless."
+    },
+    "landed": {
+      "english": "Relating to land or property in land.",
+      "bengali": "জমিজমা সংক্রান্ত",
+      "pronunciation": "/ˈlændɪd/",
+      "example": "He lost his landed property."
+    },
+    "turmoil": {
+      "english": "A state of great confusion, disorder, or disturbance.",
+      "bengali": "অস্থিরতা; বিশৃঙ্খলা",
+      "pronunciation": "/ˈtɜːrmɔɪl/",
+      "example": "The country was in political turmoil."
+    },
+    "roaring": {
+      "english": "Making a loud, powerful, continuous sound.",
+      "bengali": "গর্জনকারী; প্রচণ্ড শব্দকারী",
+      "pronunciation": "/ˈrɔːrɪŋ/",
+      "example": "The roaring river frightened the villagers."
+    },
+    "poverty": {
+      "english": "The state of being extremely poor.",
+      "bengali": "দারিদ্র্য",
+      "pronunciation": "/ˈpɒvəti/",
+      "example": "Poverty affects millions of people."
+    },
+    "adapt": {
+      "english": "To adjust to new conditions.",
+      "bengali": "খাপ খাওয়ানো; মানিয়ে নেওয়া",
+      "pronunciation": "/əˈdæpt/",
+      "example": "People must adapt to climate change."
+    },
+    "prompt": {
+      "english": "Done quickly and without delay.",
+      "bengali": "দ্রুত; তাৎক্ষণিক",
+      "pronunciation": "/prɒmpt/",
+      "example": "Prompt action can prevent further damage."
+    }
+  },
+
+  "mcqs": [
+    {
+      "id": "mcq_a",
+      "question": "Meherjan is a victim of —",
+      "options": [
+        "drought",
+        "famine",
+        "river erosion",
+        "cyclone"
+      ],
+      "correctAnswer": 2,
+      "clue": "Look at what happened to Meherjan's land and shelter.",
+      "explanation": "Meherjan lost her property and shelter because of river erosion."
+    },
+    {
+      "id": "mcq_b",
+      "question": "Meherjan's dreams and happiness are — by the greedy river Jamuna.",
+      "options": [
+        "destroyed",
+        "boosted",
+        "flourished",
+        "mixed"
+      ],
+      "correctAnswer": 0,
+      "clue": "Look at the sentence about the greedy Jamuna.",
+      "explanation": "The passage says that the greedy Jamuna has shattered her dreams and happiness."
+    },
+    {
+      "id": "mcq_c",
+      "question": "The phrase 'roaring rivers' means —",
+      "options": [
+        "rivers that flow strongly making wild sounds",
+        "rivers having many rowing boats in them",
+        "rivers that make people cry out",
+        "rivers that have noisy fishes"
+      ],
+      "correctAnswer": 0,
+      "clue": "Think about the sound made by a powerful river.",
+      "explanation": "Roaring rivers are rivers that flow strongly and make wild or loud sounds."
+    },
+    {
+      "id": "mcq_d",
+      "question": "The roof of Meherjan's shelter is made of —",
+      "options": [
+        "concrete",
+        "tin",
+        "polythene",
+        "straw"
+      ],
+      "correctAnswer": 2,
+      "clue": "Look at the second sentence.",
+      "explanation": "The passage says that her shelter has a polythene roof."
+    },
+    {
+      "id": "mcq_e",
+      "question": "The phrase 'landed property' means —",
+      "options": [
+        "a rented piece of land",
+        "a piece of land on the bank of a river",
+        "property in the form of a source of income to its owner",
+        "property used only as an agricultural farm"
+      ],
+      "correctAnswer": 3,
+      "clue": "Think about the meaning of 'landed property' in relation to cultivable land.",
+      "explanation": "The supplied answer identifies option (iv) as the answer."
+    },
+    {
+      "id": "mcq_f",
+      "question": "Meherjan usually cooks her meal — her shelter.",
+      "options": [
+        "far beyond",
+        "behind",
+        "in front of",
+        "in"
+      ],
+      "correctAnswer": 2,
+      "clue": "Look at the fourth sentence of the passage.",
+      "explanation": "The passage says she tries to make a fire in front of her shelter."
+    },
+    {
+      "id": "mcq_g",
+      "question": "The phrase 'dancing of the flame' means —",
+      "options": [
+        "a traditional form of folk dance",
+        "a flame that makes people dance around it",
+        "a flame that is made unstable by the blast of air",
+        "a flame made by people to remember their pasts"
+      ],
+      "correctAnswer": 2,
+      "clue": "Look at what the whispering wind does to the fire.",
+      "explanation": "The wind makes the fire unsteady, causing the flames to move or 'dance'."
+    },
+    {
+      "id": "mcq_h",
+      "question": "Meherjan lives in her shelter —",
+      "options": [
+        "in the twinkle of an eye",
+        "in one time",
+        "instantly",
+        "gradually"
+      ],
+      "correctAnswer": 1,
+      "clue": "The supplied source answer for this item appears inconsistent with its options.",
+      "explanation": "The supplied answer lists 'alone' for (h), but 'alone' does not appear among the provided options."
+    },
+    {
+      "id": "mcq_i",
+      "question": "Bangladesh is — country.",
+      "options": [
+        "riverine",
+        "flat",
+        "eroded",
+        "climatic"
+      ],
+      "correctAnswer": 0,
+      "clue": "Look at the sentence: 'Bangladesh is a land of rivers...'",
+      "explanation": "Bangladesh is a riverine country."
+    }
+  ],
+
+  "questions": [
+    {
+      "id": "q_a",
+      "question": "Where does Meherjan live?",
+      "answer": "Meherjan lives in a slum on the Sirajgonj Town Protection Embankment.",
+      "clue": "Look at the first sentence of the passage."
+    },
+    {
+      "id": "q_b",
+      "question": "How many meals does Meherjan usually have a day?",
+      "answer": "Meherjan usually has only one meal a day.",
+      "clue": "Look at the sentence about the day's only meal."
+    },
+    {
+      "id": "q_c",
+      "question": "What makes the fire unsteady?",
+      "answer": "The whispering wind from the river Jamuna makes the fire unsteady.",
+      "clue": "Look at the sentence immediately before the one about the dancing flames."
+    },
+    {
+      "id": "q_d",
+      "question": "What does the dancing of the flames remind Meherjan?",
+      "answer": "The dancing of the flames reminds Meherjan of the turmoil in her life.",
+      "clue": "Look at the final sentence of the first paragraph."
+    },
+    {
+      "id": "q_e",
+      "question": "When did Meherjan lose her last shelter?",
+      "answer": "She lost her last shelter during the last monsoon.",
+      "clue": "Look at the sentence beginning 'It finally claimed her last shelter...'."
+    },
+    {
+      "id": "q_f",
+      "question": "How much time did the river Jamuna take to demolish Meherjan's house?",
+      "answer": "The river Jamuna took only a day to demolish Meherjan's house.",
+      "clue": "Look at the sentence beginning 'It took the river...'."
+    },
+    {
+      "id": "q_g",
+      "question": "What has shattered Meherjan's dreams?",
+      "answer": "The greedy Jamuna has shattered Meherjan's dreams and happiness.",
+      "clue": "Look at the sentence about the greedy Jamuna."
+    },
+    {
+      "id": "q_h",
+      "question": "For whom is erosion a harsh reality?",
+      "answer": "Erosion is a harsh reality for the people living along the river banks.",
+      "clue": "Look at the sentence beginning 'Erosion is a harsh reality...'."
+    },
+    {
+      "id": "q_i",
+      "question": "In which season does river erosion take a devastating turn?",
+      "answer": "River erosion takes a devastating turn during the monsoon.",
+      "clue": "Look at the paragraph discussing each monsoon."
+    },
+    {
+      "id": "q_j",
+      "question": "What is river erosion caused by?",
+      "answer": "According to the passage, river erosion is one of the main dangers caused by climate change.",
+      "clue": "Look at the sentence beginning 'In fact, river erosion...'."
+    }
+  ]
+}

@@ -5,7 +5,8 @@ import PracticeEngine from '../../features/grammar/PracticeEngine';
 import QuizEngine from '../../features/grammar/QuizEngine';
 import RearrangeList from './RearrangeList';
 import QuestionEngine from './QuestionEngine';
-
+import PassageReader from '../../features/reading/PassageReader';
+import seenPassage1 from '../../data/passages/class10/seenPassage_1.json';
 export default function ContentRenderer({ content, contentType, metadata }) {
   // Prioritize the specific type defined in the content object (e.g., 'rearrange')
   // Fall back to the generic contentType passed from the course level.
@@ -112,24 +113,35 @@ function ExampleSection({ examples }) {
 }
 
 function ReadingContentRenderer({ content, metadata }) {
+  // Use the actual interactive passage data for Seen Passage 1
+  const passageData =
+    content?.id === 'class10_seen_1'
+      ? seenPassage1
+      : content;
+
+  const sentenceExplanations = Array.isArray(passageData?.sentences)
+    ? passageData.sentences.reduce((acc, sentence, index) => {
+        acc[index] = {
+          bengali: sentence.bengaliMeaning || '',
+          grammar: sentence.forensic
+            ? Object.entries(sentence.forensic)
+                .map(([key, value]) => `${key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`)
+                .join(' • ')
+            : ''
+        };
+        return acc;
+      }, {})
+    : {};
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-      <div className="prose dark:prose-invert max-w-none">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-          {content.title || content.name || "Reading Material"}
-        </h2>
-        <div className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-          {content.content || content.passage || (typeof content === 'string' ? content : "")}
-        </div>
-        {content.author && (
-          <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              <strong>Author:</strong> {content.author}
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
+    <PassageReader
+      passage={passageData?.passage || ''}
+      wordData={passageData?.wordData || {}}
+      sentenceExplanations={sentenceExplanations}
+      mcqs={passageData?.mcqs || []}
+      questions={passageData?.questions || []}
+      title={passageData?.title || 'Interactive Passage Reader'}
+    />
   );
 }
 

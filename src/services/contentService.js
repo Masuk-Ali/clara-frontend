@@ -8,6 +8,7 @@ import hscEnglish2nd from '../data/Syllabus/HSC/English2nd.json';
 import sscEnglish1st from '../data/Syllabus/SSC/English1st.json';
 import sscEnglish2nd from '../data/Syllabus/SSC/English2nd.json';
 import jscEnglish from '../data/Syllabus/JSC/English1st&2nd.json';
+import seenPassage1 from '../data/passages/class10/seenPassage_1.json';
 
 // Create a lookup map for syllabus data
 const syllabusDataMap = {
@@ -123,43 +124,71 @@ export class ContentService {
           };
           return true;
         }
+if (contentType === 'reading' || courseData.type === 'reading') {
+  // Match the actual passage topic ID used by the class data, while still accepting the display label.
+  if (directTopic === 'class10_seen_1' || directTopic === 'Seen Passage 1') {
+    topicContent = seenPassage1;
+    topicName = seenPassage1.title;
 
-        if (contentType === 'reading' || courseData.type === 'reading') {
-          const levelMap = {
-            'primary': 'JSC',
-            'secondary': 'SSC',
-            'higher': 'HSC'
-          };
-          const levelKey = levelMap[classData.level] || classData.level.toUpperCase();
+    metadata = {
+      type: 'reading',
+      hasQuestions: Array.isArray(seenPassage1.questions) &&
+        seenPassage1.questions.length > 0,
+      hasMCQs: Array.isArray(seenPassage1.mcqs) &&
+        seenPassage1.mcqs.length > 0,
+      wordCount: seenPassage1.passage?.split(/\s+/).length || 0
+    };
 
-          let courseKey = courseData.name.includes('First') ? 'English1st' : 'English2nd';
-          if (levelKey === 'JSC') courseKey = 'English1st&2nd';
+    return true;
+  }
 
-          const syllabusData = syllabusDataMap[levelKey]?.[courseKey];
+  // Existing syllabus-based reading content
+  const levelMap = {
+    primary: 'JSC',
+    secondary: 'SSC',
+    higher: 'HSC'
+  };
 
-          if (!syllabusData) {
-            throw new Error('Reading content not available');
-          }
+  const levelKey =
+    levelMap[classData.level] ||
+    classData.level.toUpperCase();
 
-          const lookupId = directTopic;
-          topicContent = syllabusData[lookupId];
-          if (!topicContent && !isNaN(topicIndex)) {
-            topicContent = Object.values(syllabusData)[topicIndex];
-          }
+  let courseKey =
+    courseData.name.includes('First')
+      ? 'English1st'
+      : 'English2nd';
 
-          topicName = topicContent?.title || lookupId;
+  if (levelKey === 'JSC') {
+    courseKey = 'English1st&2nd';
+  }
 
-          if (!topicContent) {
-            throw new Error('Reading content not found');
-          }
+  const syllabusData = syllabusDataMap[levelKey]?.[courseKey];
 
-          metadata = {
-            type: 'reading',
-            hasQuestions: !!topicContent.questions?.length,
-            wordCount: topicContent.content?.split(' ').length || 0
-          };
-          return true;
-        }
+  if (!syllabusData) {
+    throw new Error('Reading content not available');
+  }
+
+  const lookupId = directTopic;
+  topicContent = syllabusData[lookupId];
+
+  if (!topicContent && !isNaN(topicIndex)) {
+    topicContent = Object.values(syllabusData)[topicIndex];
+  }
+
+  topicName = topicContent?.title || lookupId;
+
+  if (!topicContent) {
+    throw new Error('Reading content not found');
+  }
+
+  metadata = {
+    type: 'reading',
+    hasQuestions: !!topicContent.questions?.length,
+    wordCount: topicContent.content?.split(' ').length || 0
+  };
+
+  return true;
+}
 
         return false;
       };

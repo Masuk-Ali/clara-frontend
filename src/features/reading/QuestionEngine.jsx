@@ -7,20 +7,26 @@ export default function QuestionEngine({ questions = [] }) {
   const [score, setScore] = useState(0);
   const [results, setResults] = useState([]);
 
-  const question = questions[currentIndex];
+  const question = Array.isArray(questions) ? questions[currentIndex] : null;
+  const options = Array.isArray(question?.options) ? question.options : [];
+  const correctIndex = Number.isInteger(question?.correctAnswer)
+    ? question.correctAnswer
+    : Number.isInteger(question?.correct)
+      ? question.correct
+      : null;
 
   const handleOptionChange = (optionIndex) => {
     setSelectedOption(optionIndex);
   };
 
   const handleSubmit = () => {
-    if (selectedOption === null || !question) return;
+    if (selectedOption === null || !question || correctIndex === null) return;
 
-    const correct = selectedOption === question.correct;
+    const correct = selectedOption === correctIndex;
     const nextResult = {
       question: question.question,
-      selectedAnswer: question.options[selectedOption],
-      correctAnswer: question.options[question.correct],
+      selectedAnswer: options[selectedOption],
+      correctAnswer: options[correctIndex],
       explanation: question.explanation,
       isCorrect: correct
     };
@@ -46,7 +52,7 @@ export default function QuestionEngine({ questions = [] }) {
     setResults([]);
   };
 
-  if (!question) {
+  if (!question || !options.length) {
     return (
       <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-200 text-center text-gray-600">
         No questions available for this passage.
@@ -63,7 +69,7 @@ export default function QuestionEngine({ questions = [] }) {
         </div>
 
         <div className="space-y-3">
-          {question.options.map((option, index) => (
+          {options.map((option, index) => (
             <label key={index} className="flex items-center gap-3 p-4 border rounded-xl cursor-pointer hover:border-blue-300 transition">
               <input
                 type="radio"
@@ -88,11 +94,14 @@ export default function QuestionEngine({ questions = [] }) {
 
       {submitted && (
         <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
-          <div className={`rounded-lg p-4 ${selectedOption === question.correct ? 'bg-green-50 border-green-200 text-green-900' : 'bg-red-50 border-red-200 text-red-900'}`}>
+          <div className={`rounded-lg p-4 ${selectedOption === correctIndex ? 'bg-green-50 border-green-200 text-green-900' : 'bg-red-50 border-red-200 text-red-900'}`}>
             <p className="font-semibold">
-              {selectedOption === question.correct ? 'Correct!' : 'Incorrect.'}
+              {selectedOption === correctIndex ? 'Correct!' : 'Incorrect.'}
             </p>
-            <p className="mt-2 text-sm text-gray-700">Correct answer: <span className="font-medium">{question.options[question.correct]}</span></p>
+            <p className="mt-2 text-sm text-gray-700">Correct answer: <span className="font-medium">{options[correctIndex]}</span></p>
+            {question.clue && (
+              <p className="mt-2 text-sm text-gray-700">Clue: {question.clue}</p>
+            )}
             {question.explanation && (
               <p className="mt-3 text-sm text-gray-700">Explanation: {question.explanation}</p>
             )}

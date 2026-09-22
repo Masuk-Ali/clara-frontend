@@ -291,7 +291,7 @@ export const educationData = [
             name: "English First Paper",
             type: "reading",
             topics: [
-              "Seen Passage 1",
+              "class10_seen_1",
               "Seen Passage 2",
               "Unseen Passage 1",
               "Unseen Passage 2",
