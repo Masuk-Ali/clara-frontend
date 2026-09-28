@@ -1,0 +1,68 @@
+{
+  "id": "unseen_milton_information_transfer",
+  "type": "unseen_passage",
+  "name": "Unseen Passage: John Milton",
+  "title": "John Milton: Information Transfer and Summary",
+  "passage": "John Milton became one of England's great poets after Shakespeare. His father planned a literary career for him. At seven, Milton began school in 1615. A few years later, he attended St. Paul's School, where he studied until 1624. In 1625, he entered Christ's College at Cambridge. He earned an M.A. degree at twenty-four and went to live with his father in Horton. From 1632 to 1638, he continued his studies and mastered the literature of Rome, Greece, Italy, France, Spain, and the Bible. He married Mary Powell in 1643 and became blind in 1652. The idea for his famous poem Paradise Lost developed after he lost his sight. The work was published in 1665. Milton died nine years later, in 1674.",
+  "informationTransfer": {
+    "instructions": "Complete the table with information from the passage.",
+    "columns": ["Name of events", "Place", "Year / Time", "What / Contribution"],
+    "rows": [
+      {
+        "id": "schooling",
+        "cells": [
+          { "text": "Studied from 1617-1624" },
+          { "input": { "id": "school-place", "answer": "St. Paul's School" } },
+          { "text": "1617-1624" },
+          { "text": "School education" }
+        ]
+      },
+      {
+        "id": "college",
+        "cells": [
+          { "text": "Entered college" },
+          { "text": "Christ's College, Cambridge" },
+          { "input": { "id": "college-year", "answer": "1625" } },
+          { "text": "Higher education" }
+        ]
+      },
+      {
+        "id": "degree",
+        "cells": [
+          { "text": "Earned a degree" },
+          { "text": "Cambridge" },
+          { "text": "At 24" },
+          { "input": { "id": "degree-name", "answer": "M.A.", "answers": ["M.A.", "MA", "Master of Arts", "Master's degree"] } }
+        ]
+      },
+      {
+        "id": "poem",
+        "cells": [
+          { "text": "Famous work published" },
+          { "text": "—" },
+          { "text": "1665" },
+          { "input": { "id": "famous-work", "answer": "Paradise Lost" } }
+        ]
+      },
+      {
+        "id": "death",
+        "cells": [
+          { "text": "Milton passed away" },
+          { "text": "—" },
+          { "input": { "id": "death-year", "answer": "1674" } },
+          { "text": "Poet" }
+        ]
+      }
+    ]
+  },
+  "summaryWriting": {
+    "prompt": "Write a summary of the passage in your own words.",
+    "requirements": [
+      "Include the main events in Milton's education and life.",
+      "Mention the development and publication of Paradise Lost.",
+      "Aim for 40-55 words."
+    ],
+    "minWords": 40,
+    "maxWords": 55
+  }
+}

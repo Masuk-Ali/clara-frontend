@@ -1,0 +1,14 @@
+{
+  "id": "class10_seen_2",
+  "type": "gap_filling",
+  "title": "Seen Passage 2: A Village Fair",
+  "originalPassage": "A village fair is a popular event in rural Bangladesh. It is usually held in an open place once a year. People from nearby villages come to buy household goods, enjoy local foods, and watch cultural performances. Children have fun on rides while traders display toys, sweets, and handicrafts. The fair becomes lively from morning until evening. When the sun sets, visitors return home, carrying goods and pleasant memories.",
+  "gapPassage": "Once a year, villagers attend a {{1}} gathering in an open field. Visitors from nearby places {{2}} to shop for useful items and enjoy local food and performances. Young children have fun on {{3}}, while sellers offer toys, {{4}}, and handmade crafts. As evening arrives, people head home with {{5}} memories.",
+  "gaps": [
+    { "id": "1", "answer": "lively" },
+    { "id": "2", "answer": "gather" },
+    { "id": "3", "answer": "rides" },
+    { "id": "4", "answer": "sweets" },
+    { "id": "5", "answer": "pleasant" }
+  ]
+}

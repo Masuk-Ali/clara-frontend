@@ -3,11 +3,13 @@ import { getRearrangeContent, rearrangeBank } from '../../data/classesData';
 import RuleSection from '../../features/grammar/RuleSection';
 import PracticeEngine from '../../features/grammar/PracticeEngine';
 import QuizEngine from '../../features/grammar/QuizEngine';
+import GapFilling from './GapFilling';
 import RearrangeList from './RearrangeList';
 import QuestionEngine from './QuestionEngine';
 import PassageReader from '../../features/reading/PassageReader';
+import UnseenPassage from '../../features/reading/UnseenPassage';
 import seenPassage1 from '../../data/passages/class10/seenPassage_1.json';
-export default function ContentRenderer({ content, contentType, metadata }) {
+export default function ContentRenderer({ content, contentType, metadata, onEvaluateSummary }) {
   // Prioritize the specific type defined in the content object (e.g., 'rearrange')
   // Fall back to the generic contentType passed from the course level.
   const activeType = (content && typeof content === 'object' && content.type) || metadata?.type || contentType;
@@ -17,6 +19,10 @@ export default function ContentRenderer({ content, contentType, metadata }) {
       return <GrammarContentRenderer content={content} metadata={metadata} />;
     case 'reading':
       return <ReadingContentRenderer content={content} metadata={metadata} />;
+    case 'gap_filling':
+      return <GapFilling exercise={content} />;
+    case 'unseen_passage':
+      return <UnseenPassage exercise={content} onEvaluateSummary={onEvaluateSummary} />;
     case 'practice':
       return <PracticeContentRenderer content={content} metadata={metadata} />;
     case 'quiz':
@@ -35,11 +41,13 @@ function GrammarContentRenderer({ content, metadata }) {
     { id: 'rules', label: '📋 Rules', component: RuleSection, props: { rules: content.rules, examples: [] } },
     { id: 'examples', label: '💡 Examples', component: ExampleSection, props: { examples: content.examples } },
     { id: 'practice', label: '🎯 Practice', component: PracticeEngine, props: { practiceQuestions: content.practice } },
-    { id: 'quiz', label: '🧠 Quiz', component: QuizEngine, props: { quizQuestions: content.quiz } }
+    { id: 'quiz', label: '🧠 Quiz', component: QuizEngine, props: { quizQuestions: content.quiz } },
+    { id: 'gapFilling', label: '✏️ Gap Filling', component: GapFilling, props: { exercise: content.gapFilling } }
   ].filter(tab => {
     // Only show tabs that have content
     if (tab.id === 'practice' && !content.practice?.length) return false;
     if (tab.id === 'quiz' && !content.quiz?.length) return false;
+    if (tab.id === 'gapFilling' && !content.gapFilling?.gaps?.length) return false;
     return true;
   });
 

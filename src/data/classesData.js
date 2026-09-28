@@ -1,4 +1,5 @@
 import { rearrangeBank } from './rearrangeBank';
+import unseenPassageMilton from './passages/unseenPassageMilton.json';
 
 export const classSentenceCount = {
   "6": 8,
@@ -292,8 +293,8 @@ export const educationData = [
             type: "reading",
             topics: [
               "class10_seen_1",
-              "Seen Passage 2",
-              "Unseen Passage 1",
+              "class10_seen_2",
+              { ...unseenPassageMilton },
               "Unseen Passage 2",
               "Information Transfer",
               "Summarizing",

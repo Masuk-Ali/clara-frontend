@@ -9,6 +9,7 @@ import sscEnglish1st from '../data/Syllabus/SSC/English1st.json';
 import sscEnglish2nd from '../data/Syllabus/SSC/English2nd.json';
 import jscEnglish from '../data/Syllabus/JSC/English1st&2nd.json';
 import seenPassage1 from '../data/passages/class10/seenPassage_1.json';
+import seenPassage2 from '../data/passages/Class10/seenPassage_2.json';
 
 // Create a lookup map for syllabus data
 const syllabusDataMap = {
@@ -126,6 +127,18 @@ export class ContentService {
         }
 if (contentType === 'reading' || courseData.type === 'reading') {
   // Match the actual passage topic ID used by the class data, while still accepting the display label.
+  if (directTopic === 'class10_seen_2') {
+    topicContent = seenPassage2;
+    topicName = seenPassage2.title;
+
+    metadata = {
+      type: 'gap_filling',
+      wordCount: seenPassage2.passage?.split(/\s+/).length || 0
+    };
+
+    return true;
+  }
+
   if (directTopic === 'class10_seen_1' || directTopic === 'Seen Passage 1') {
     topicContent = seenPassage1;
     topicName = seenPassage1.title;
