@@ -4,12 +4,20 @@ import RuleSection from '../../features/grammar/RuleSection';
 import PracticeEngine from '../../features/grammar/PracticeEngine';
 import QuizEngine from '../../features/grammar/QuizEngine';
 import GapFilling from './GapFilling';
+import Matching from './Matching';
+import PoemQA from './PoemQA';
 import RearrangeList from './RearrangeList';
+import StoryQA from './StoryQA';
+import StoryCompletion from './StoryCompletion';
+import DialogueWriting from './DialogueWriting';
 import QuestionEngine from './QuestionEngine';
 import PassageReader from '../../features/reading/PassageReader';
 import UnseenPassage from '../../features/reading/UnseenPassage';
+import UnseenPassageSection from './UnseenPassageSection';
 import seenPassage1 from '../../data/passages/class10/seenPassage_1.json';
-export default function ContentRenderer({ content, contentType, metadata, onEvaluateSummary }) {
+import SeenPassageSection from './SeenPassageSection';
+import ExerciseListSection from './ExerciseListSection';
+export default function ContentRenderer({ content, contentType, metadata, onEvaluateSummary, onSubmitStoryCompletion, onSubmitDialogue, onBackToSyllabus }) {
   // Prioritize the specific type defined in the content object (e.g., 'rearrange')
   // Fall back to the generic contentType passed from the course level.
   const activeType = (content && typeof content === 'object' && content.type) || metadata?.type || contentType;
@@ -18,11 +26,54 @@ export default function ContentRenderer({ content, contentType, metadata, onEval
     case 'grammar':
       return <GrammarContentRenderer content={content} metadata={metadata} />;
     case 'reading':
+      if (content?.id === 'class10_seen_1') {
+        return <SeenPassageSection passages={[seenPassage1]} onBackToSyllabus={onBackToSyllabus} />;
+      }
       return <ReadingContentRenderer content={content} metadata={metadata} />;
     case 'gap_filling':
       return <GapFilling exercise={content} />;
+    case 'matching':
+      return <Matching exercise={content} />;
+    case 'matching_list':
+      return (
+        <ExerciseListSection
+          listTitle="Matching List"
+          items={content.exercises}
+          onBackToSyllabus={onBackToSyllabus}
+          renderSelected={(exercise) => <Matching exercise={exercise} />}
+        />
+      );
+    case 'seen_passage_2_list':
+      return (
+        <ExerciseListSection
+          listTitle="Seen Passage 2 List"
+          items={content.passages}
+          onBackToSyllabus={onBackToSyllabus}
+          renderSelected={(passage) => (
+            <div className="space-y-5">
+              <section className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+                <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">{passage.title}</h2>
+                <h3 className="mb-3 text-lg font-semibold text-gray-800 dark:text-gray-100">📖 Original Passage</h3>
+                <p className="whitespace-pre-line text-base leading-relaxed text-gray-800 dark:text-gray-100">{passage.originalPassage}</p>
+              </section>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">3. Gap Filling — 5 Marks</h3>
+              <GapFilling exercise={{ ...passage, title: '', originalPassage: '' }} />
+            </div>
+          )}
+        />
+      );
+    case 'poem_qa':
+      return <PoemQA exercise={content} />;
+    case 'story_qa':
+      return <StoryQA exercise={content} />;
+    case 'story_completion':
+      return <StoryCompletion exercise={content} onSubmit={onSubmitStoryCompletion} />;
+    case 'dialogue_writing':
+      return <DialogueWriting exercise={content} onSubmit={onSubmitDialogue} />;
     case 'unseen_passage':
       return <UnseenPassage exercise={content} onEvaluateSummary={onEvaluateSummary} />;
+    case 'unseen_passage_list':
+      return <UnseenPassageSection exercise={content} onBackToSyllabus={onBackToSyllabus} onEvaluateSummary={onEvaluateSummary} />;
     case 'practice':
       return <PracticeContentRenderer content={content} metadata={metadata} />;
     case 'quiz':
@@ -140,7 +191,6 @@ function ReadingContentRenderer({ content, metadata }) {
         return acc;
       }, {})
     : {};
-
   return (
     <PassageReader
       passage={passageData?.passage || ''}

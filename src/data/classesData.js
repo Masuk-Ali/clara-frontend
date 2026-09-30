@@ -1,5 +1,11 @@
 import { rearrangeBank } from './rearrangeBank';
-import unseenPassageMilton from './passages/unseenPassageMilton.json';
+import unseenPassageList from './unseenPassages';
+import { matchingExerciseList } from './matchingExercises';
+import seenPassage2List from './seenPassage2Exercises';
+import poemExercise from './poemExercises';
+import storyExercise from './storyExercises';
+import storyCompletionExercise from './storyCompletionExercises';
+import dialogueExercise from './dialogueExercises';
 
 export const classSentenceCount = {
   "6": 8,
@@ -293,8 +299,8 @@ export const educationData = [
             type: "reading",
             topics: [
               "class10_seen_1",
-              "class10_seen_2",
-              { ...unseenPassageMilton },
+              seenPassage2List,
+              unseenPassageList,
               "Unseen Passage 2",
               "Information Transfer",
               "Summarizing",
@@ -302,7 +308,12 @@ export const educationData = [
                 name: "Rearrange",
                 type: "rearrange",
                 storyIds: ["lion_and_mouse"]
-              }
+              },
+              matchingExerciseList,
+              poemExercise,
+              storyExercise,
+              storyCompletionExercise,
+              dialogueExercise
             ],
           },
           {

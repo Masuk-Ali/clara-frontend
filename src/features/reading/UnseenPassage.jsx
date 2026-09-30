@@ -73,7 +73,10 @@ export default function UnseenPassage({ exercise = {}, onEvaluateSummary }) {
       </section>
 
       <section className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
-        <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Information Transfer</h3>
+        <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+          {informationTransfer.questionNumber ? `Q${informationTransfer.questionNumber}. ` : ''}Information Transfer
+          {informationTransfer.marks !== undefined ? ` — ${informationTransfer.marks} Marks` : ''}
+        </h3>
         {informationTransfer.instructions && <p className="mb-4 text-gray-700 dark:text-gray-300">{informationTransfer.instructions}</p>}
         <div className="overflow-x-auto">
           <table className="w-full min-w-max border-collapse text-left text-sm text-gray-800 dark:text-gray-100">
@@ -149,7 +152,10 @@ export default function UnseenPassage({ exercise = {}, onEvaluateSummary }) {
       </section>
 
       <section className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
-        <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Summary Writing</h3>
+        <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+          {summaryWriting.questionNumber ? `Q${summaryWriting.questionNumber}. ` : ''}Summary Writing
+          {summaryWriting.marks !== undefined ? ` — ${summaryWriting.marks} Marks` : ''}
+        </h3>
         <p className="mb-4 text-gray-700 dark:text-gray-300">
           {summaryWriting.prompt || 'Write a summary of the passage in your own words.'}
         </p>

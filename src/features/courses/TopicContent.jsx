@@ -141,11 +141,18 @@ export default function TopicContent() {
     if (!contentData) return null;
     const { content, metadata } = contentData;
     const { type, topicName, classData, courseData } = metadata;
+    const isPassageList = content?.id === 'class10_seen_1' ||
+      ['unseen_passage_list', 'seen_passage_2_list', 'matching_list'].includes(content?.type);
 
     return (
       <>
-        {renderHeader()}
-        <ContentRenderer content={content} contentType={type} metadata={metadata} />
+        {!isPassageList && renderHeader()}
+        <ContentRenderer
+          content={content}
+          contentType={type}
+          metadata={metadata}
+          onBackToSyllabus={() => navigate(`/topics/${classId}/${courseId}`)}
+        />
       </>
     );
   };

@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 
 export default function QuestionEngine({ questions = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [score, setScore] = useState(0);
-  const [results, setResults] = useState([]);
+  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [submittedAnswers, setSubmittedAnswers] = useState({});
+  const [revealedClues, setRevealedClues] = useState({});
 
   const question = Array.isArray(questions) ? questions[currentIndex] : null;
+  const questionKey = question?.id ?? currentIndex;
+  const selectedOption = selectedAnswers[questionKey] ?? null;
+  const result = submittedAnswers[questionKey];
+  const submitted = Boolean(result);
+  const score = Object.values(submittedAnswers).filter((answer) => answer.isCorrect).length;
   const options = Array.isArray(question?.options) ? question.options : [];
   const correctIndex = Number.isInteger(question?.correctAnswer)
     ? question.correctAnswer
@@ -16,7 +20,7 @@ export default function QuestionEngine({ questions = [] }) {
       : null;
 
   const handleOptionChange = (optionIndex) => {
-    setSelectedOption(optionIndex);
+    setSelectedAnswers((current) => ({ ...current, [questionKey]: optionIndex }));
   };
 
   const handleSubmit = () => {
@@ -24,33 +28,29 @@ export default function QuestionEngine({ questions = [] }) {
 
     const correct = selectedOption === correctIndex;
     const nextResult = {
-      question: question.question,
       selectedAnswer: options[selectedOption],
-      correctAnswer: options[correctIndex],
-      explanation: question.explanation,
       isCorrect: correct
     };
 
-    setResults((prev) => [...prev, nextResult]);
-    setScore((prev) => prev + (correct ? 1 : 0));
-    setSubmitted(true);
+    setSubmittedAnswers((current) => ({ ...current, [questionKey]: nextResult }));
   };
 
-  const goNext = () => {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setSelectedOption(null);
-      setSubmitted(false);
+  const goToQuestion = (index) => {
+    if (index >= 0 && index < questions.length) {
+      setCurrentIndex(index);
     }
   };
 
   const restartQuiz = () => {
     setCurrentIndex(0);
-    setSelectedOption(null);
-    setSubmitted(false);
-    setScore(0);
-    setResults([]);
+    setSelectedAnswers({});
+    setSubmittedAnswers({});
+    setRevealedClues({});
   };
+
+  const allQuestionsAnswered = questions.every((item, index) =>
+    Boolean(submittedAnswers[item?.id ?? index])
+  );
 
   if (!question || !options.length) {
     return (
@@ -83,13 +83,31 @@ export default function QuestionEngine({ questions = [] }) {
           ))}
         </div>
 
-        <button
-          onClick={handleSubmit}
-          disabled={selectedOption === null || submitted}
-          className="mt-6 inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
-        >
-          Submit Answer
-        </button>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          {!submitted && question.clue && !revealedClues[questionKey] && (
+            <button
+              type="button"
+              onClick={() => setRevealedClues((current) => ({ ...current, [questionKey]: true }))}
+              className="px-5 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition font-medium"
+            >
+              💡 Clue
+            </button>
+          )}
+
+          <button
+            onClick={handleSubmit}
+            disabled={selectedOption === null || submitted}
+            className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+          >
+            Submit Answer
+          </button>
+        </div>
+
+        {!submitted && question.clue && revealedClues[questionKey] && (
+          <div className="mt-3 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+            <p className="text-sm text-yellow-800">💡 Clue: {question.clue}</p>
+          </div>
+        )}
       </div>
 
       {submitted && (
@@ -99,41 +117,47 @@ export default function QuestionEngine({ questions = [] }) {
               {selectedOption === correctIndex ? 'Correct!' : 'Incorrect.'}
             </p>
             <p className="mt-2 text-sm text-gray-700">Correct answer: <span className="font-medium">{options[correctIndex]}</span></p>
-            {question.clue && (
-              <p className="mt-2 text-sm text-gray-700">Clue: {question.clue}</p>
-            )}
             {question.explanation && (
               <p className="mt-3 text-sm text-gray-700">Explanation: {question.explanation}</p>
             )}
           </div>
 
-          {currentIndex < questions.length - 1 ? (
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={goNext}
-                className="px-5 py-3 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition"
-              >
-                Next Question
-              </button>
-            </div>
-          ) : (
+          {currentIndex === questions.length - 1 && allQuestionsAnswered && (
             <div className="mt-4 space-y-3">
               <div className="rounded-xl bg-white p-4 border border-gray-200">
                 <p className="text-sm text-gray-600">Comprehension complete!</p>
                 <p className="text-xl font-semibold text-gray-900">Score: {score} / {questions.length}</p>
               </div>
-              <div className="flex justify-end">
-                <button
-                  onClick={restartQuiz}
-                  className="px-5 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                >
-                  Restart Questions
-                </button>
-              </div>
+              <button
+                onClick={restartQuiz}
+                className="px-5 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              >
+                Restart Questions
+              </button>
             </div>
           )}
         </div>
       )}
+
+      <nav aria-label="MCQ question navigation" className="flex items-center justify-between gap-4">
+        <button
+          type="button"
+          onClick={() => goToQuestion(currentIndex - 1)}
+          disabled={currentIndex === 0}
+          className="px-5 py-3 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition"
+        >
+          Previous Question
+        </button>
+        <span className="text-sm text-gray-500">{currentIndex + 1} / {questions.length}</span>
+        <button
+          type="button"
+          onClick={() => goToQuestion(currentIndex + 1)}
+          disabled={currentIndex === questions.length - 1}
+          className="px-5 py-3 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition"
+        >
+          Next Question
+        </button>
+      </nav>
     </div>
   );
 }

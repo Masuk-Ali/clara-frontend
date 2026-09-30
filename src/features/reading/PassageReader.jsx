@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import WordPopup from './WordPopup';
 import VocabularyPanel from './VocabularyPanel';
 import QuestionEngine from './QuestionEngine';
+import QuestionAnswerSection from '../../components/ui/QuestionAnswerSection';
 
 const PassageReader = ({
   passage = '',
@@ -9,7 +10,9 @@ const PassageReader = ({
   sentenceExplanations = {},
   mcqs = [],
   questions = [],
-  title = 'Interactive Passage Reader'
+  title = 'Interactive Passage Reader',
+  mcqTitle = 'Multiple Choice Questions',
+  questionTitle = 'Comprehension Questions'
 }) => {
   const [selectedWord, setSelectedWord] = useState(null);
   const [wordPosition, setWordPosition] = useState({ x: 0, y: 0 });
@@ -24,9 +27,6 @@ const PassageReader = ({
   const lastClickedSentence = useRef(null);
 
   const passageRef = useRef(null);
-  const [studentAnswers, setStudentAnswers] = useState({});
-  const [checkedQuestions, setCheckedQuestions] = useState({});
-  const [revealedClues, setRevealedClues] = useState({});
   
 
   // Load saved words from localStorage on mount
@@ -194,54 +194,6 @@ const PassageReader = ({
       [word]: false
     }));
   };
-
-  const handleStudentAnswerChange = (questionId, answer) => {
-  setStudentAnswers(prev => ({
-    ...prev,
-    [questionId]: answer
-  }));
-};
-
-const handleCheckAnswer = (questionId) => {
-  const answer = studentAnswers[questionId]?.trim();
-
-  if (!answer) {
-    return;
-  }
-
-  setCheckedQuestions(prev => ({
-    ...prev,
-    [questionId]: true
-  }));
-};
-
-const handleShowClue = (questionId) => {
-  setRevealedClues(prev => ({
-    ...prev,
-    [questionId]: true
-  }));
-};
-
-const handleResetQuestion = (questionId) => {
-  setStudentAnswers(prev => {
-    const updated = { ...prev };
-    delete updated[questionId];
-    return updated;
-  });
-
-  setCheckedQuestions(prev => {
-    const updated = { ...prev };
-    delete updated[questionId];
-    return updated;
-  });
-
-  setRevealedClues(prev => {
-    const updated = { ...prev };
-    delete updated[questionId];
-    return updated;
-  });
-};
-
 
   /*
    * Render one word.
@@ -487,7 +439,7 @@ const handleResetQuestion = (questionId) => {
           <div className="mb-6">
             <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
               <span>🧠</span>
-              Multiple Choice Questions
+              {mcqTitle}
             </h3>
           </div>
 
@@ -498,170 +450,7 @@ const handleResetQuestion = (questionId) => {
         </div>
       )}
 
-     {/* Questions Section */}
-{questions && questions.length > 0 && (
-  <div className="bg-white rounded-xl shadow-lg p-8">
-
-    <div className="mb-6">
-      <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-        <span>❓</span>
-        Comprehension Questions
-      </h3>
-
-      <p className="text-gray-600 mt-2">
-        Read each question and write your own answer.
-      </p>
-    </div>
-
-    <div className="space-y-6">
-
-      {questions.map((item, index) => {
-        const questionId = item.id || index;
-        const studentAnswer = studentAnswers[questionId] || '';
-        const isChecked = checkedQuestions[questionId];
-        const isClueRevealed = revealedClues[questionId];
-
-        return (
-          <div
-            key={questionId}
-            className="rounded-xl border border-gray-200 bg-gray-50 p-5"
-          >
-
-            {/* Question */}
-            <p className="font-semibold text-gray-900 text-lg">
-              {index + 1}. {item.question}
-            </p>
-
-           {/* Student Answer */}
-{!isChecked && (
-  <div className="mt-4">
-
-    <label
-      htmlFor={`question-answer-${questionId}`}
-      className="block text-sm font-medium text-gray-700 mb-2"
-    >
-      Your Answer
-    </label>
-
-    <textarea
-      id={`question-answer-${questionId}`}
-      rows={4}
-      value={studentAnswer}
-      onChange={(e) =>
-        handleStudentAnswerChange(
-          questionId,
-          e.target.value
-        )
-      }
-      placeholder="Write your answer here..."
-      className="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
-    />
-
-  </div>
-)}
-         {/* Action Buttons */}
-{!isChecked && (
-  <div className="mt-3 flex flex-wrap gap-3">
-
-    {/* Clue */}
-    {item.clue && !isClueRevealed && (
-      <button
-        type="button"
-        onClick={() =>
-          handleShowClue(questionId)
-        }
-        className="px-5 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition font-medium"
-      >
-        💡 Clue
-      </button>
-    )}
-
-    {/* Check Answer */}
-    <button
-      type="button"
-      onClick={() =>
-        handleCheckAnswer(questionId)
-      }
-      disabled={!studentAnswer.trim()}
-      className={`px-5 py-2 rounded-lg transition font-medium ${
-        studentAnswer.trim()
-          ? 'bg-blue-600 text-white hover:bg-blue-700'
-          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-      }`}
-    >
-      Check Answer
-    </button>
-
-  </div>
-)}
-
- {/* Clue - only while attempting */}
-{!isChecked && isClueRevealed && item.clue && (
-  <div className="mt-5 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
-
-    <h4 className="font-semibold text-yellow-800 mb-1">
-      💡 Clue
-    </h4>
-
-    <p className="text-yellow-700">
-      {item.clue}
-    </p>
-
-  </div>
-)}
-
-{/* Result after checking */}
-{isChecked && (
-  <div className="mt-5 space-y-4">
-
-    {/* Student's submitted answer */}
-    <div className="p-4 bg-white rounded-lg border border-gray-200">
-
-      <h4 className="font-semibold text-gray-800 mb-2">
-        📝 Your Answer
-      </h4>
-
-      <p className="text-gray-700 whitespace-pre-wrap">
-        {studentAnswer}
-      </p>
-
-    </div>
-
-    {/* Model Answer */}
-    <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
-
-      <h4 className="font-semibold text-green-800 mb-1">
-        📖 Model Answer
-      </h4>
-
-      <p className="text-green-700">
-        {item.answer}
-      </p>
-
-    </div>
-
-    {/* Reset */}
-    <div className="pt-2">
-      <button
-        type="button"
-        onClick={() =>
-          handleResetQuestion(questionId)
-        }
-        className="px-5 py-2 rounded-lg bg-gray-600 text-white hover:bg-gray-700 transition font-medium"
-      >
-        ↻ Reset
-      </button>
-    </div>
-
-  </div>
-)}          </div>
-        );
-      })}
-
-    </div>
-
-  </div>
-)}
+      <QuestionAnswerSection questions={questions} title={questionTitle} />
 
     </div>
   );
