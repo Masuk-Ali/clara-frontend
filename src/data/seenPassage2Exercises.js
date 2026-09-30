@@ -1,4 +1,4 @@
-import seenPassage2 from './passages/Class10/seenPassage_2.json';
+import seenPassage2 from './passages/class10/seenPassage_2.json';
 
 export const seenPassage2Exercises = [
   {

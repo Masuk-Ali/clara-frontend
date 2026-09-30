@@ -9,7 +9,7 @@ import sscEnglish1st from '../data/Syllabus/SSC/English1st.json';
 import sscEnglish2nd from '../data/Syllabus/SSC/English2nd.json';
 import jscEnglish from '../data/Syllabus/JSC/English1st&2nd.json';
 import seenPassage1 from '../data/passages/class10/seenPassage_1.json';
-import seenPassage2 from '../data/passages/Class10/seenPassage_2.json';
+import seenPassage2 from '../data/passages/class10/seenPassage_2.json';
 
 // Create a lookup map for syllabus data
 const syllabusDataMap = {
