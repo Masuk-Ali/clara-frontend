@@ -57,7 +57,7 @@ const secondaryEnglishSecondPaper = [
     title: "PART A: GRAMMAR",
     marks: 60,
     topics: [
-      { title: "1. Gap Filling with Clues / Without Clues", marks: 10 },
+    { title: "1. Gap Filling with Clues / Without Clues", marks: 10, slug: "gap-filling" },
       { title: "2. Substitution Table", marks: 5 },
       { title: "3. Right Form of Verbs", marks: 10 },
       {
@@ -126,13 +126,25 @@ export default function Topics() {
             </div>
             <div className="divide-y divide-gray-200">
               {section.topics.map((topic) => (
-                <div key={topic.title} className="flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{topic.title}</h3>
-                    {topic.description && <p className="mt-1 text-sm text-gray-600"><em>{topic.description}</em></p>}
+                topic.slug ? (
+                  <button
+                    key={topic.title}
+                    type="button"
+                    onClick={() => navigate(`/grammar-lesson/${classId}/${courseId}/${topic.slug}`)}
+                    className="flex w-full flex-col gap-1 py-4 text-left transition hover:text-blue-700 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4"
+                  >
+                    <span className="font-semibold">{topic.title}</span>
+                    <span className="shrink-0 text-sm font-medium text-gray-600">{topic.marks} Marks</span>
+                  </button>
+                ) : (
+                  <div key={topic.title} className="flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{topic.title}</h3>
+                      {topic.description && <p className="mt-1 text-sm text-gray-600"><em>{topic.description}</em></p>}
+                    </div>
+                    <span className="shrink-0 text-sm font-medium text-gray-600">{topic.marks} Marks</span>
                   </div>
-                  <span className="shrink-0 text-sm font-medium text-gray-600">{topic.marks} Marks</span>
-                </div>
+                )
               ))}
             </div>
           </section>

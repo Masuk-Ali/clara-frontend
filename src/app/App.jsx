@@ -18,6 +18,7 @@ import Classes from "../features/courses/Classes";
 import Courses from "../features/courses/Courses";
 import Topics from "../features/courses/Topics";
 import TopicContent from "../features/courses/TopicContent";
+import GrammarTopicPage from "../features/grammar/GrammarTopicPage";
 import Settings from "../features/settings/Settings";
 import Dictionary from "../features/dictionary/Dictionary";
 import Library from "../features/library/Library";
@@ -88,6 +89,7 @@ export default function App() {
           <Route path="/courses/:classId" element={<Courses />} />
           <Route path="/topics/:classId/:courseId" element={<Topics />} />
           <Route path="/content/:classId/:courseId/:topicId" element={<TopicContent />} />
+          <Route path="/grammar-lesson/:classId/:courseId/:topicSlug" element={<GrammarTopicPage />} />
           <Route path="/grammar/:classId/:courseId/:topicId" element={<TopicContent />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/about" element={<About />} />

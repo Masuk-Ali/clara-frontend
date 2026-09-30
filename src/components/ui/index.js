@@ -25,5 +25,6 @@ export { default as UnseenPassageSection } from './UnseenPassageSection';
 export { default as StoryQA } from './StoryQA';
 export { default as StoryCompletion } from './StoryCompletion';
 export { default as DialogueWriting } from './DialogueWriting';
+export { default as GapFillingPractice } from '../../features/grammar/GapFillingPractice';
 export { default as ContentRenderer } from './ContentRenderer';
 export { default as Layout } from './Layout';
